@@ -1,9 +1,11 @@
+import useMotionDismiss from '../../hooks/useMotionDismiss';
 import React, { useState, useRef } from 'react';
 import { X, ChevronDown, Upload, Crop, Trash2, Loader2, Save } from 'lucide-react';
 import ImageCropModal from './ImageCropModal';
 import { API, getAuthHeaders, DEFAULT_TITLES, DEFAULT_CATEGORIES } from '../../utils/api';
 
 export default function ProjectFormModal({ initial, onSave, onCancel, loading, projects = [] }) {
+    const [overlayRef, dismiss] = useMotionDismiss(onCancel);
     // Kumpulan opsi referensi judul
     const titleOptions = Array.from(new Set([
         ...DEFAULT_TITLES,
@@ -124,13 +126,13 @@ export default function ProjectFormModal({ initial, onSave, onCancel, loading, p
             )}
 
             <div
-                className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-                onClick={onCancel}
+                ref={overlayRef}
+                className="cmp-admin-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+                onClick={dismiss}
             >
                 <div
                     className="relative w-full max-w-2xl max-h-[92vh] overflow-y-auto rounded-3xl bg-white shadow-2xl"
                     onClick={e => e.stopPropagation()}
-                    style={{ animation: 'scaleIn 0.3s cubic-bezier(0.34,1.56,0.64,1)' }}
                 >
                     {/* Header */}
                     <div className="sticky top-0 flex items-center justify-between border-b border-slate-100 bg-white px-8 py-5 rounded-t-3xl z-10">
@@ -143,7 +145,7 @@ export default function ProjectFormModal({ initial, onSave, onCancel, loading, p
                             </p>
                         </div>
                         <button
-                            onClick={onCancel}
+                            onClick={dismiss}
                             className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 transition cursor-pointer"
                         >
                             <X size={18} />
@@ -164,7 +166,7 @@ export default function ProjectFormModal({ initial, onSave, onCancel, loading, p
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
                                 placeholder="Ketik nama atau judul proyek Anda di sini..."
-                                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-800 focus:border-[#007CA7] focus:ring-2 focus:ring-[#007CA7]/20 outline-none transition"
+                                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-800 focus:border-cmp-blue focus:ring-2 focus:ring-cmp-blue/20 outline-none transition"
                             />
 
                             <div className="mt-2 flex items-center gap-2">
@@ -177,7 +179,7 @@ export default function ProjectFormModal({ initial, onSave, onCancel, loading, p
                                         onChange={(e) => {
                                             if (e.target.value) setTitle(e.target.value);
                                         }}
-                                        className="w-full appearance-none rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 pr-8 text-xs text-slate-600 focus:border-[#007CA7] outline-none cursor-pointer"
+                                        className="w-full appearance-none rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 pr-8 text-xs text-slate-600 focus:border-cmp-blue outline-none cursor-pointer"
                                     >
                                         <option value="">-- Pilih Judul yang Tersedia --</option>
                                         {titleOptions.map((t) => (
@@ -201,7 +203,7 @@ export default function ProjectFormModal({ initial, onSave, onCancel, loading, p
                                 value={category}
                                 onChange={(e) => setCategory(e.target.value)}
                                 placeholder="Contoh: Automation, Marine, Engineering, Construction, IT..."
-                                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-800 focus:border-[#007CA7] focus:ring-2 focus:ring-[#007CA7]/20 outline-none transition"
+                                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-800 focus:border-cmp-blue focus:ring-2 focus:ring-cmp-blue/20 outline-none transition"
                             />
 
                             <div className="mt-2 flex items-center gap-2">
@@ -214,7 +216,7 @@ export default function ProjectFormModal({ initial, onSave, onCancel, loading, p
                                         onChange={(e) => {
                                             if (e.target.value) setCategory(e.target.value);
                                         }}
-                                        className="w-full appearance-none rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 pr-8 text-xs text-slate-600 focus:border-[#007CA7] outline-none cursor-pointer"
+                                        className="w-full appearance-none rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 pr-8 text-xs text-slate-600 focus:border-cmp-blue outline-none cursor-pointer"
                                     >
                                         <option value="">-- Pilih Kategori yang Tersedia --</option>
                                         {categoryOptions.map((c) => (
@@ -234,7 +236,7 @@ export default function ProjectFormModal({ initial, onSave, onCancel, loading, p
                                 onChange={e => setDescription(e.target.value)}
                                 rows={3}
                                 placeholder="Jelaskan ruang lingkup, teknologi yang diterapkan, atau spesifikasi pekerjaan..."
-                                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm resize-none focus:border-[#007CA7] focus:ring-2 focus:ring-[#007CA7]/20 outline-none"
+                                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm resize-none focus:border-cmp-blue focus:ring-2 focus:ring-cmp-blue/20 outline-none"
                             />
                         </div>
 
@@ -244,7 +246,7 @@ export default function ProjectFormModal({ initial, onSave, onCancel, loading, p
                                 <label className="block text-sm font-semibold text-slate-700">
                                     Gambar Proyek ({images.length})
                                 </label>
-                                <span className="text-[11px] text-[#007CA7] font-medium">
+                                <span className="text-[11px] text-cmp-blue font-medium">
                                     * Dilengkapi Dual Preview (Card Luar & Dialog Dalam)
                                 </span>
                             </div>
@@ -256,7 +258,7 @@ export default function ProjectFormModal({ initial, onSave, onCancel, loading, p
                                     fileRef.current.click();
                                 }}
                                 disabled={uploading}
-                                className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#007CA7]/40 bg-sky-50/40 py-4 text-sm font-medium text-[#007CA7] hover:bg-sky-50 hover:border-[#007CA7] transition disabled:opacity-50 cursor-pointer"
+                                className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-cmp-blue/40 bg-cmp-blue-soft/40 py-4 text-sm font-medium text-cmp-blue hover:bg-cmp-blue-soft hover:border-cmp-blue transition disabled:opacity-50 cursor-pointer"
                             >
                                 {uploading ? <Loader2 size={18} className="animate-spin" /> : <Upload size={18} />}
                                 {uploading ? 'Sedang memproses...' : '+ Pilih & Sesuaikan Foto Baru'}
@@ -279,7 +281,7 @@ export default function ProjectFormModal({ initial, onSave, onCancel, loading, p
                                                 <button
                                                     type="button"
                                                     onClick={() => handleRecropExisting(url, i)}
-                                                    className="p-2 rounded-lg bg-[#00A3E0] text-white hover:bg-[#008dbf] transition shadow cursor-pointer"
+                                                    className="p-2 rounded-lg bg-cmp-blue text-white hover:bg-cmp-navy transition shadow cursor-pointer"
                                                     title="Crop ulang / sesuaikan posisi foto ini"
                                                 >
                                                     <Crop size={16} />
@@ -307,7 +309,7 @@ export default function ProjectFormModal({ initial, onSave, onCancel, loading, p
                         <div className="sticky bottom-0 flex gap-3 border-t border-slate-100 bg-white pt-5 pb-2">
                             <button
                                 type="button"
-                                onClick={onCancel}
+                                onClick={dismiss}
                                 className="flex-1 rounded-xl border border-slate-200 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer"
                             >
                                 Batal
@@ -315,7 +317,7 @@ export default function ProjectFormModal({ initial, onSave, onCancel, loading, p
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#007CA7] py-3 text-sm font-semibold text-white hover:bg-[#005f80] transition disabled:opacity-70 shadow-lg shadow-[#007CA7]/25 cursor-pointer"
+                                className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-cmp-blue py-3 text-sm font-semibold text-white hover:bg-cmp-navy transition disabled:opacity-70 shadow-lg shadow-cmp-blue/25 cursor-pointer"
                             >
                                 {loading ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                                 {loading ? 'Menyimpan...' : 'Simpan Project'}

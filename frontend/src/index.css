@@ -1,6 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 
+@theme {
+  --color-cmp-navy: #010066;
+  --color-cmp-blue: #292985;
+  --color-cmp-blue-soft: #f0f0fa;
+  --color-cmp-red: #e00000;
+  --color-cmp-red-hover: #b80000;
+}
+
 
 html, body {
   background-color: #f8fafc;

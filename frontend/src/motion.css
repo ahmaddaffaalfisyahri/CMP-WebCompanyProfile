@@ -1,0 +1,40 @@
+:root {
+  --motion-reveal-ease: cubic-bezier(0.35, 0, 0.2, 1);
+  --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-fast: 340ms;
+  --motion-card: 620ms;
+  --motion-reveal: 1200ms;
+  --motion-dialog: 500ms;
+  --motion-hero: 1450ms;
+}
+
+@keyframes cmp-fade { from { opacity: 0; } }
+@keyframes cmp-rise { from { opacity: 0; translate: 0 24px; } }
+@keyframes cmp-dialog-in { from { opacity: 0; scale: .96; } }
+@keyframes cmp-overlay-out { to { opacity: 0; } }
+@keyframes cmp-dialog-out { to { opacity: 0; scale: .98; } }
+@keyframes cmp-toast-in { from { opacity: 0; translate: 0 12px; } }
+
+.cmp-admin { animation: cmp-fade var(--motion-reveal) var(--motion-ease) both; }
+.cmp-admin button:focus-visible { outline: 2px solid #010066; outline-offset: 3px; }
+.cmp-admin button { transition-duration: var(--motion-fast); transition-timing-function: var(--motion-ease); }
+.cmp-admin button:not(:disabled):active { scale: .98; }
+.cmp-admin tbody tr { transition: background-color var(--motion-fast) var(--motion-ease); }
+.cmp-admin-overlay { animation: cmp-fade var(--motion-dialog) var(--motion-ease) both; }
+.cmp-admin-overlay > :first-child { animation: cmp-dialog-in var(--motion-dialog) var(--motion-ease) both; }
+.cmp-admin-overlay[data-closing="true"] { animation: cmp-overlay-out var(--motion-dialog) var(--motion-ease) both; }
+.cmp-admin-overlay[data-closing="true"] > :first-child { animation: cmp-dialog-out var(--motion-dialog) var(--motion-ease) both; }
+.cmp-admin-toast { animation: cmp-toast-in var(--motion-dialog) var(--motion-ease) both; }
+.cmp-admin-toast button:focus-visible { outline-color: white; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cmp-admin button:active { scale: 1; }
+  .cmp-admin, .cmp-admin *, .cmp-admin-overlay, .cmp-admin-overlay *,
+  .cmp-site, .cmp-site *, .cmp-site *::before, .cmp-site *::after, .cmp-site dialog::backdrop {
+    animation-duration: .01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    transition-delay: 0ms !important;
+  }
+}

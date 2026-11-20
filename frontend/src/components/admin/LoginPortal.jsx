@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { User, Lock, Eye, EyeOff, LogIn, Loader2, AlertCircle } from 'lucide-react';
+import cmpLogo from '../../assets/CMP_Logo_Transparant.png';
 import { API } from '../../utils/api';
 
 export default function LoginPortal({ onLoginSuccess }) {
@@ -42,27 +43,21 @@ export default function LoginPortal({ onLoginSuccess }) {
     };
 
     return (
-        <div className="min-h-screen relative flex items-center justify-center bg-slate-50 p-4 font-sans text-slate-800">
-            {/* Background Canvas yang sama seperti landing page */}
-            <div
-                className="absolute inset-0 pointer-events-none bg-no-repeat bg-cover bg-center opacity-40"
-                style={{ background: 'linear-gradient(135deg, #01006618, #ffffff)' }}
-            />
-
+        <div className="cmp-admin min-h-screen relative flex items-center justify-center bg-linear-to-br from-cmp-blue-soft to-white p-4 font-sans text-slate-800">
             {/* Login Card Putih Bersih */}
             <div className="relative z-10 w-full max-w-sm">
-                <div className="bg-white border border-slate-200/80 rounded-3xl p-8 sm:p-9 shadow-xl">
+                <div className="bg-white border border-slate-200/80 border-t-4 border-t-cmp-red rounded-3xl p-8 sm:p-9 shadow-xl">
                     
                     {/* Logo & Judul */}
                     <div className="text-center mb-6">
                         <div className="inline-flex items-center justify-center mb-3">
                             <img
-                                src="/cmp/logo.png"
+                                src={cmpLogo}
                                 alt="CMP Logo"
-                                className="h-9 w-auto"
+                                className="h-16 w-auto object-contain"
                             />
                         </div>
-                        <h2 className="text-xl font-bold text-[#03365b] tracking-tight">
+                        <h2 className="text-xl font-bold text-cmp-navy tracking-tight">
                             Admin Portal
                         </h2>
                         <p className="mt-1 text-xs text-slate-500">
@@ -95,7 +90,7 @@ export default function LoginPortal({ onLoginSuccess }) {
                                     value={username}
                                     onChange={(e) => setUsername(e.target.value)}
                                     placeholder="Username"
-                                    className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-800 placeholder-slate-400 text-sm focus:border-[#007CA7] focus:ring-2 focus:ring-[#007CA7]/20 outline-none transition"
+                                    className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-800 placeholder-slate-400 text-sm focus:border-cmp-blue focus:ring-2 focus:ring-cmp-blue/20 outline-none transition"
                                 />
                             </div>
                         </div>
@@ -114,7 +109,7 @@ export default function LoginPortal({ onLoginSuccess }) {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="Password"
-                                    className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-800 placeholder-slate-400 text-sm focus:border-[#007CA7] focus:ring-2 focus:ring-[#007CA7]/20 outline-none transition"
+                                    className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-800 placeholder-slate-400 text-sm focus:border-cmp-blue focus:ring-2 focus:ring-cmp-blue/20 outline-none transition"
                                 />
                                 <button
                                     type="button"
@@ -129,7 +124,7 @@ export default function LoginPortal({ onLoginSuccess }) {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full mt-2 py-3 px-4 rounded-xl bg-[#007CA7] hover:bg-[#005f80] text-white font-semibold text-sm transition flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer shadow-md shadow-[#007CA7]/20"
+                            className="w-full mt-2 py-3 px-4 rounded-xl bg-cmp-red hover:bg-cmp-red-hover text-white font-semibold text-sm transition flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer shadow-md shadow-cmp-red/20"
                         >
                             {loading ? (
                                 <>
@@ -148,7 +143,7 @@ export default function LoginPortal({ onLoginSuccess }) {
                     <div className="mt-6 pt-4 border-t border-slate-100 text-center">
                         <a
                             href="/"
-                            className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-[#007CA7] transition"
+                            className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-cmp-blue transition"
                         >
                             ← Kembali ke Website
                         </a>

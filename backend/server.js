@@ -38,30 +38,85 @@ const renderApiStatus = (_req, res) => {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>CMP Backend API</title>
             <style>
-                body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #021f35; color: #f8fafc; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
-                .card { background: rgba(3, 54, 91, 0.85); border: 1px solid rgba(0, 163, 224, 0.3); border-radius: 24px; padding: 40px 32px; max-width: 460px; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.6); backdrop-filter: blur(16px); }
-                .badge { display: inline-block; background: rgba(0, 163, 224, 0.15); border: 1px solid rgba(0, 163, 224, 0.35); color: #00A3E0; font-size: 11px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; padding: 5px 14px; border-radius: 9999px; margin-bottom: 18px; }
-                h1 { color: #ffffff; margin: 0 0 10px 0; font-size: 24px; font-weight: 800; }
-                p { color: #94a3b8; font-size: 13.5px; line-height: 1.6; margin: 0 0 24px 0; }
-                .links { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; text-align: left; background: rgba(2, 36, 62, 0.7); padding: 14px 16px; border-radius: 14px; border: 1px solid rgba(0, 163, 224, 0.15); }
-                .link-item { display: flex; justify-content: space-between; font-size: 12px; color: #cbd5e1; text-decoration: none; }
-                .link-item:hover { color: #00A3E0; }
-                .link-item code { color: #00A3E0; font-family: monospace; }
-                .btn { display: inline-flex; align-items: center; justify-content: center; width: 100%; background: linear-gradient(135deg, #00A3E0, #007CA7); color: white; text-decoration: none; padding: 13px 24px; border-radius: 12px; font-weight: 700; font-size: 14px; transition: all 0.2s ease; box-shadow: 0 6px 20px rgba(0, 163, 224, 0.35); box-sizing: border-box; }
-                .btn:hover { background: linear-gradient(135deg, #00b2f5, #0089b8); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0, 163, 224, 0.5); }
+                :root {
+                    --cmp-primary: #010066;
+                    --cmp-accent: #FE0000;
+                    --cmp-cta: #E00000;
+                    --cmp-cta-hover: #B80000;
+                    --cmp-background: #FFFFFF;
+                    --cmp-background-alt: #F7F7F7;
+                    --cmp-border: #D8D9E2;
+                    --cmp-text-secondary: #4A4F63;
+                }
+                body {
+                    display: grid;
+                    place-items: center;
+                    min-height: 100vh;
+                    margin: 0;
+                    padding: 20px;
+                    box-sizing: border-box;
+                    background: var(--cmp-primary);
+                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+                }
+                .card {
+                    width: 100%;
+                    max-width: 460px;
+                    box-sizing: border-box;
+                    padding: clamp(20px, 6vw, 36px);
+                    border-top: 4px solid var(--cmp-accent);
+                    border-radius: 16px;
+                    background: var(--cmp-background);
+                    box-shadow: 0 16px 40px rgb(0 0 0 / 24%);
+                }
+                .status { margin: 0 0 12px; color: var(--cmp-primary); font-size: 13px; font-weight: 700; }
+                h1 { margin: 0 0 12px; color: var(--cmp-primary); font-size: 28px; }
+                p { margin: 0 0 24px; color: var(--cmp-text-secondary); line-height: 1.5; }
+                .links {
+                    display: grid;
+                    gap: 12px;
+                    margin-bottom: 24px;
+                    padding: 16px;
+                    border: 1px solid var(--cmp-border);
+                    border-radius: 10px;
+                    background: var(--cmp-background-alt);
+                }
+                .link-item {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-between;
+                    align-items: baseline;
+                    gap: 4px 12px;
+                    color: var(--cmp-primary);
+                    font-size: 14px;
+                    text-underline-offset: 3px;
+                }
+                .link-item:hover { color: var(--cmp-cta-hover); }
+                .btn {
+                    display: block;
+                    padding: 13px 16px;
+                    border-radius: 8px;
+                    background: var(--cmp-cta);
+                    color: var(--cmp-background);
+                    font-size: 14px;
+                    font-weight: 700;
+                    text-align: center;
+                    text-decoration: none;
+                }
+                .btn:hover { background: var(--cmp-cta-hover); }
+                a:focus-visible { outline: 2px solid var(--cmp-primary); outline-offset: 3px; }
             </style>
         </head>
         <body>
-            <div class="card">
-                <span class="badge">API Status: Online</span>
+            <main class="card">
+                <p class="status">API aktif</p>
                 <h1>CMP Backend API</h1>
-                <p>Server API backend CMP berjalan normal dan siap melayani permintaan.</p>
+                <p>Periksa status API atau buka data proyek.</p>
                 <div class="links">
-                    <a href="/api/health" class="link-item"><span>Health Check:</span> <code>/api/health</code></a>
-                    <a href="/api/projects" class="link-item"><span>Projects Data:</span> <code>/api/projects</code></a>
+                    <a href="/api/health" class="link-item"><span>Status API</span> <code>/api/health</code></a>
+                    <a href="/api/projects" class="link-item"><span>Data proyek</span> <code>/api/projects</code></a>
                 </div>
-                <a href="/admin" class="btn">Buka Portal Admin</a>
-            </div>
+                <a href="${process.env.NODE_ENV === 'production' ? '/admin' : 'http://localhost:5173/admin'}" class="btn">Buka Portal Admin</a>
+            </main>
         </body>
         </html>
     `);

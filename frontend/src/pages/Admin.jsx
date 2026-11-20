@@ -4,6 +4,7 @@ import {
     Settings, Mail, Globe, LogOut, Sliders
 } from 'lucide-react';
 
+import cmpLogo from '../assets/CMP_Logo_Transparant.png';
 import { API, getAuthHeaders } from '../utils/api';
 
 // Admin Subcomponents
@@ -155,7 +156,7 @@ export default function Admin() {
     if (authChecking) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-slate-50">
-                <Loader2 size={36} className="text-[#007CA7] animate-spin" />
+                <Loader2 size={36} className="text-cmp-blue animate-spin" />
             </div>
         );
     }
@@ -172,30 +173,30 @@ export default function Admin() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 font-sans text-slate-800">
+        <div className="cmp-admin min-h-screen bg-slate-50 font-sans text-slate-800">
             {/* Top Navigation Bar */}
-            <header className="sticky top-0 z-40 bg-[#03365b] text-white shadow-md border-b border-white/10">
-                <div className="mx-auto max-w-7xl px-6 lg:px-12 flex h-16 items-center justify-between">
+            <header className="sticky top-0 z-40 border-b-2 border-cmp-red bg-white text-cmp-navy shadow-sm">
+                <div className="mx-auto max-w-7xl flex min-h-16 flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-2 lg:px-12">
                     <div className="flex items-center gap-3">
-                        <img src="/cmp/logo.png" alt="CMP" className="h-8 w-auto rounded bg-white px-2" />
-                        <span className="text-white/30 text-lg">|</span>
+                        <img src={cmpLogo} alt="CMP" className="h-12 w-auto shrink-0 object-contain" />
+                        <span aria-hidden="true" className="h-6 w-px bg-cmp-navy/15" />
                         <h1 className="font-bold text-lg tracking-tight">Admin Panel</h1>
                     </div>
 
-                    <div className="flex items-center gap-2.5">
+                    <div className="flex flex-wrap items-center gap-2">
                         {/* Tombol Kotak Masuk Pesan */}
                         <button
                             onClick={() => {
                                 setInboxOpen(true);
                                 setUnreadCount(0);
                             }}
-                            className="relative flex items-center gap-1.5 text-xs text-white/90 hover:text-white px-3.5 py-2 rounded-xl border border-white/15 hover:border-white/30 bg-white/5 hover:bg-white/10 transition cursor-pointer"
+                            className="relative flex items-center gap-1.5 text-xs text-cmp-navy px-3.5 py-2 rounded-xl border border-cmp-navy/15 hover:border-cmp-navy/30 hover:bg-cmp-blue-soft transition cursor-pointer"
                             title="Kotak Masuk Pesan dari Website"
                         >
-                            <Mail size={14} className="text-[#00A3E0]" />
+                            <Mail size={14} className="text-cmp-blue" />
                             <span>Pesan Masuk</span>
                             {unreadCount > 0 && (
-                                <span className="ml-1 bg-amber-400 text-[#03365b] font-extrabold text-[10px] px-1.5 py-0.2 rounded-full animate-pulse">
+                                <span className="ml-1 bg-cmp-red text-white font-extrabold text-[10px] px-1.5 py-0.2 rounded-full">
                                     {unreadCount}
                                 </span>
                             )}
@@ -204,20 +205,20 @@ export default function Admin() {
                         {/* Tombol Pengaturan Website (Hero & Kontak) */}
                         <button
                             onClick={() => setSettingsOpen(true)}
-                            className="flex items-center gap-1.5 text-xs text-white/90 hover:text-white px-3.5 py-2 rounded-xl border border-white/15 hover:border-white/30 bg-white/5 hover:bg-white/10 transition cursor-pointer"
+                            className="flex items-center gap-1.5 text-xs text-cmp-navy px-3.5 py-2 rounded-xl border border-cmp-navy/15 hover:border-cmp-navy/30 hover:bg-cmp-blue-soft transition cursor-pointer"
                             title="Pengaturan Teks Berjalan, Angka Statistik, & Kontak"
                         >
-                            <Sliders size={14} className="text-[#00A3E0]" />
+                            <Sliders size={14} className="text-cmp-blue" />
                             <span>Pengaturan Web</span>
                         </button>
 
                         {/* Tombol Pengaturan Akun */}
                         <button
                             onClick={() => setProfileOpen(true)}
-                            className="flex items-center gap-1.5 text-xs text-white/90 hover:text-white px-3.5 py-2 rounded-xl border border-white/15 hover:border-white/30 bg-white/5 hover:bg-white/10 transition cursor-pointer"
+                            className="flex items-center gap-1.5 text-xs text-cmp-navy px-3.5 py-2 rounded-xl border border-cmp-navy/15 hover:border-cmp-navy/30 hover:bg-cmp-blue-soft transition cursor-pointer"
                             title="Konfigurasi Akun & Password"
                         >
-                            <Settings size={14} className="text-[#00A3E0]" />
+                            <Settings size={14} className="text-cmp-blue" />
                             <span>Akun</span>
                         </button>
 
@@ -225,15 +226,15 @@ export default function Admin() {
                             href="/"
                             target="_blank"
                             rel="noreferrer"
-                            className="flex items-center gap-1.5 text-xs text-white/90 hover:text-white px-3.5 py-2 rounded-xl border border-white/15 hover:border-white/30 bg-white/5 hover:bg-white/10 transition cursor-pointer"
+                            className="flex items-center gap-1.5 text-xs text-cmp-navy px-3.5 py-2 rounded-xl border border-cmp-navy/15 hover:border-cmp-navy/30 hover:bg-cmp-blue-soft transition cursor-pointer"
                         >
-                            <Globe size={14} className="text-[#00A3E0]" />
+                            <Globe size={14} className="text-cmp-blue" />
                             <span>View Site</span>
                         </a>
 
                         <button
                             onClick={handleLogout}
-                            className="flex items-center gap-1.5 text-xs text-rose-300 hover:text-white px-3.5 py-2 rounded-xl border border-rose-500/20 hover:bg-rose-500/20 transition cursor-pointer"
+                            className="flex items-center gap-1.5 text-xs text-cmp-red hover:text-white px-3.5 py-2 rounded-xl border border-cmp-red/25 hover:bg-cmp-red-hover transition cursor-pointer"
                         >
                             <LogOut size={14} />
                             <span>Logout</span>
@@ -246,7 +247,7 @@ export default function Admin() {
             <main className="mx-auto max-w-7xl px-6 lg:px-12 py-10">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
                     <div>
-                        <h2 className="text-2xl font-extrabold text-[#03365b] tracking-tight">Portfolio Projects</h2>
+                        <h2 className="text-2xl font-extrabold text-cmp-navy tracking-tight">Portfolio Projects</h2>
                         <p className="text-xs text-slate-500 mt-1">
                             {projects.length} project(s) total • Data tersinkronisasi otomatis dengan halaman depan
                         </p>
@@ -254,7 +255,7 @@ export default function Admin() {
 
                     <button
                         onClick={() => { setEditing(null); setFormOpen(true); }}
-                        className="flex items-center gap-2 rounded-xl bg-[#007CA7] hover:bg-[#005f80] text-white px-5 py-2.5 text-sm font-semibold transition shadow-md shadow-[#007CA7]/20 cursor-pointer"
+                        className="flex items-center gap-2 rounded-xl bg-cmp-blue hover:bg-cmp-navy text-white px-5 py-2.5 text-sm font-semibold transition shadow-md shadow-cmp-blue/20 cursor-pointer"
                     >
                         <Plus size={18} />
                         <span>Add Project</span>
@@ -264,12 +265,12 @@ export default function Admin() {
                 {/* Table or Empty State */}
                 {fetching ? (
                     <div className="flex flex-col items-center justify-center py-20">
-                        <Loader2 size={36} className="text-[#007CA7] animate-spin mb-3" />
+                        <Loader2 size={36} className="text-cmp-blue animate-spin mb-3" />
                         <span className="text-xs text-slate-400">Memuat data proyek...</span>
                     </div>
                 ) : projects.length === 0 ? (
                     <div className="rounded-3xl border border-slate-200 bg-white p-12 text-center shadow-sm">
-                        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-sky-50 text-[#007CA7] mx-auto mb-4">
+                        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-cmp-blue-soft text-cmp-blue mx-auto mb-4">
                             <ImageIcon size={32} />
                         </div>
                         <h3 className="font-bold text-slate-700 text-lg">Belum ada proyek</h3>
@@ -278,7 +279,7 @@ export default function Admin() {
                         </p>
                         <button
                             onClick={() => { setEditing(null); setFormOpen(true); }}
-                            className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#007CA7] hover:bg-[#005f80] text-white px-5 py-2.5 text-sm font-semibold transition cursor-pointer"
+                            className="mt-5 inline-flex items-center gap-2 rounded-xl bg-cmp-blue hover:bg-cmp-navy text-white px-5 py-2.5 text-sm font-semibold transition cursor-pointer"
                         >
                             <Plus size={16} /> Tambah Proyek Pertama
                         </button>
@@ -311,11 +312,11 @@ export default function Admin() {
                                                         )}
                                                     </div>
                                                 </td>
-                                                <td className="px-6 py-4 font-bold text-[#03365b] max-w-xs">
+                                                <td className="px-6 py-4 font-bold text-cmp-navy max-w-xs">
                                                     {p.title}
                                                 </td>
                                                 <td className="px-6 py-4">
-                                                    <span className="inline-block rounded-full bg-[#007CA7]/10 text-[#007CA7] px-3 py-1 text-xs font-semibold">
+                                                    <span className="inline-block rounded-full bg-cmp-blue/10 text-cmp-blue px-3 py-1 text-xs font-semibold">
                                                         {p.category || p.tag || 'General'}
                                                     </span>
                                                 </td>
@@ -326,7 +327,7 @@ export default function Admin() {
                                                     <div className="flex items-center justify-end gap-2">
                                                         <button
                                                             onClick={() => { setEditing(p); setFormOpen(true); }}
-                                                            className="p-2 rounded-xl text-slate-500 hover:text-[#007CA7] hover:bg-sky-50 transition cursor-pointer"
+                                                            className="p-2 rounded-xl text-slate-500 hover:text-cmp-blue hover:bg-cmp-blue-soft transition cursor-pointer"
                                                             title="Edit Proyek"
                                                         >
                                                             <Pencil size={16} />

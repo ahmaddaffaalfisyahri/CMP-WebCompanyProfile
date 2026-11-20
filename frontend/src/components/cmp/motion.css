@@ -1,0 +1,168 @@
+.cmp-site main, .cmp-site .footer { animation: cmp-fade var(--motion-reveal) var(--motion-ease) both; }
+
+@keyframes cmp-nav-in { from { opacity: 0; translate: 0 -12px; } }
+@keyframes cmp-photo-settle { from { scale: 1.045; } }
+@keyframes cmp-hero-light { from { transform: translateX(-45%); opacity: 0; } 45% { opacity: .65; } to { transform: translateX(40%); opacity: 0; } }
+@keyframes cmp-content-in { from { opacity: .7; translate: 0 7px; } }
+@keyframes cmp-spin { to { rotate: 360deg; } }
+
+.cmp-site .header {
+  animation: cmp-nav-in var(--motion-reveal) var(--motion-ease) both;
+  transition: background-color var(--motion-card), box-shadow var(--motion-card);
+}
+.cmp-site .header.is-scrolled {
+  background: rgb(255 255 255 / .93);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 18px rgb(1 0 102 / .08);
+}
+.cmp-site .header .logo { transition: scale var(--motion-fast) var(--motion-ease); }
+.cmp-site .header a:hover .logo { scale: 1.03; }
+.cmp-site .navlinks a:not(.btn) { position: relative; border-color: transparent; }
+.cmp-site .navlinks a:not(.btn)::after {
+  position: absolute;
+  content: "";
+  inset: auto 0 -1px;
+  height: 2px;
+  background: var(--red);
+  scale: 0 1;
+  transition: scale var(--motion-card) var(--motion-ease);
+}
+.cmp-site .navlinks a.active::after { scale: 1 1; }
+.cmp-site .menu { position: relative; width: 40px; height: 40px; }
+.cmp-site .menu svg {
+  position: absolute;
+  inset: 8px;
+  transition: rotate var(--motion-card) var(--motion-ease), opacity var(--motion-fast);
+}
+.cmp-site .menu .menu-close, .cmp-site .menu[aria-expanded="true"] .menu-bars { opacity: 0; rotate: -16deg; }
+.cmp-site .menu[aria-expanded="true"] .menu-close { opacity: 1; rotate: 0deg; }
+.cmp-site .menu-items { display: flex; align-items: center; gap: inherit; }
+@media (max-width: 670px) {
+  .cmp-site .navlinks {
+    display: grid;
+    grid-template-rows: 0fr;
+    padding: 0 18px;
+    opacity: 0;
+    visibility: hidden;
+    transition: grid-template-rows var(--motion-card) var(--motion-ease), opacity var(--motion-fast), visibility var(--motion-fast);
+  }
+  .cmp-site .navlinks.open { display: grid; grid-template-rows: 1fr; opacity: 1; visibility: visible; }
+  .cmp-site .menu-items { min-height: 0; overflow: hidden; flex-direction: column; align-items: stretch; }
+  .cmp-site .menu-items .btn { margin: 4px 0 12px; }
+}
+
+.cmp-site .hero:not([data-hero-visible="false"]) .hero-copy > * { animation: cmp-rise var(--motion-hero) var(--motion-reveal-ease) backwards; }
+.cmp-site .hero:not([data-hero-visible="false"]) .hero-copy > :nth-child(2) { animation-delay: 150ms; }
+.cmp-site .hero:not([data-hero-visible="false"]) .hero-copy > :nth-child(3) { animation-delay: 300ms; }
+.cmp-site .hero:not([data-hero-visible="false"]) .hero-copy > :nth-child(4) { animation-delay: 450ms; }
+.cmp-site .hero-photo { overflow: hidden; }
+.cmp-site .hero:not([data-hero-visible="false"]) .hero-photo img { animation: cmp-photo-settle 8s var(--motion-ease); }
+.cmp-site .hero:not([data-hero-visible="false"]) .hero-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 30%, rgb(255 255 255 / .16), transparent 70%);
+  animation: cmp-hero-light 7s ease-out .4s both;
+}
+
+.cmp-site [data-reveal] {
+  opacity: 0;
+  translate: 0 24px;
+  --reveal-transition:
+    opacity var(--motion-reveal) var(--motion-reveal-ease) var(--reveal-delay, 0ms),
+    translate var(--motion-reveal) var(--motion-reveal-ease) var(--reveal-delay, 0ms);
+  transition: var(--reveal-transition);
+}
+.cmp-site [data-reveal="shown"], .cmp-site [data-reveal]:focus-within {
+  opacity: 1;
+  translate: none;
+}
+.cmp-site [data-reveal]:focus-within { transition-delay: 0ms; }
+
+.cmp-site .btn, .cmp-site .filter, .cmp-site .detail {
+  transition: translate var(--motion-fast) var(--motion-ease), scale var(--motion-fast) var(--motion-ease),
+    background-color var(--motion-fast), border-color var(--motion-fast), color var(--motion-fast), box-shadow var(--motion-fast);
+}
+.cmp-site .btn:hover:not(:disabled) { transform: none; translate: 0 -2px; box-shadow: 0 6px 18px rgb(224 0 0 / .22); }
+.cmp-site :is(.btn, .filter, .detail):active:not(:disabled) { scale: .98; }
+.cmp-site .form :is(input, textarea) { transition: border-color var(--motion-fast), box-shadow var(--motion-fast); }
+.cmp-site .form :is(input, textarea):focus { border-color: var(--cta); box-shadow: 0 0 0 3px rgb(224 0 0 / .12); }
+.cmp-site .form label:has(+ :focus) { color: var(--cta-hover); }
+.cmp-site .form .small span:not(:empty), .cmp-site .project-empty { animation: cmp-content-in var(--motion-card) var(--motion-ease) both; }
+.cmp-site .form .small span { display: inline-block; }
+.cmp-site .contact-spinner { animation: cmp-spin 850ms linear infinite; }
+
+.cmp-site :is(.vision, .mission, .about-img) {
+  --card-hover-transition: transform var(--motion-card) var(--motion-ease), box-shadow var(--motion-card) var(--motion-ease);
+  transition: var(--card-hover-transition);
+}
+.cmp-site .about-img[data-reveal] {
+  transition: var(--reveal-transition), var(--card-hover-transition);
+}
+.cmp-site .direction :is(.vision, .mission)[data-reveal="shown"] {
+  animation: cmp-rise 740ms var(--motion-reveal-ease) var(--direction-delay, 0ms) both;
+}
+.cmp-site :is(.vision, .mission, .about-img):hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgb(1 0 102 / .12), 0 2px var(--red);
+}
+.cmp-site :is(.vision, .about-img) { overflow: hidden; }
+.cmp-site :is(.vision, .about-img) img, .cmp-site .project-photo img {
+  transition: scale var(--motion-card) var(--motion-ease);
+}
+.cmp-site :is(.vision, .about-img, .project-photo):hover img { scale: 1.04; }
+.cmp-site .project-photo { overflow: hidden; }
+.cmp-site .service {
+  --service-hover-color: var(--cmp-cta-hover, #B80000);
+  --service-color-duration: 1050ms;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition:
+    opacity var(--motion-reveal) var(--motion-reveal-ease) var(--reveal-delay, 0ms),
+    translate var(--motion-reveal) var(--motion-reveal-ease) var(--reveal-delay, 0ms),
+    transform var(--motion-card) var(--motion-ease),
+    box-shadow var(--service-color-duration) ease-in-out;
+}
+.cmp-site .service:hover {
+  z-index: 1;
+  transform: scale(1.025);
+  box-shadow: 0 8px 24px rgb(1 0 102 / .07), 0 4px 18px rgb(224 0 0 / .07);
+}
+.cmp-site .service h3 { transition: color var(--service-color-duration) ease-in-out; }
+.cmp-site .service:hover h3 { color: var(--service-hover-color); }
+.cmp-site .service .ico, .cmp-site .service .index { transition: scale var(--motion-card), translate var(--motion-card), color var(--service-color-duration) ease-in-out; }
+.cmp-site .service:hover .ico { scale: 1.05; color: var(--service-hover-color); }
+.cmp-site .service:hover .index { translate: 4px 0; color: var(--service-hover-color); }
+
+.cmp-site .project-gallery[open] { animation: cmp-dialog-in var(--motion-dialog) var(--motion-ease) both; }
+.cmp-site .project-gallery[open]::backdrop { animation: cmp-fade var(--motion-dialog) var(--motion-ease) both; }
+.cmp-site .project-gallery[data-closing="true"] { animation: cmp-dialog-out var(--motion-dialog) var(--motion-ease) both; }
+.cmp-site .project-gallery[data-closing="true"]::backdrop { animation: cmp-fade var(--motion-dialog) var(--motion-ease) reverse both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cmp-site [data-reveal] { opacity: 1; translate: none; }
+  .cmp-site :is(.btn, .service, .vision, .mission, .about-img):hover { transform: none; translate: none; }
+  .cmp-site :is(.header a, .vision, .about-img, .project-photo):hover img,
+  .cmp-site .service:hover .ico { scale: 1; }
+  .cmp-site .service:hover .index { translate: none; }
+}
+
+/* Keep an opaque frame underneath the incoming photo throughout the crossfade. */
+.cmp-site .project-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.cmp-site .project-slide[data-layer="previous"] { opacity: 1; z-index: 0; }
+.cmp-site .project-slide[data-layer="active"] {
+  opacity: 1;
+  z-index: 1;
+  transition: opacity 1000ms var(--motion-reveal-ease);
+}
+.cmp-site .project-slide img { width: 100%; height: 100%; }
+.cmp-site .project-photo .tag { z-index: 2; }
+.cmp-site .gallery-stage .project-slide { background: #08082d; }
+.cmp-site .gallery-stage .project-slide img { object-fit: contain; }
+.cmp-site .gallery-stage .counter, .cmp-site .gallery-stage .gallery-control { z-index: 2; }

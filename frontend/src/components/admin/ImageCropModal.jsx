@@ -1,3 +1,4 @@
+import useMotionDismiss from '../../hooks/useMotionDismiss';
 import React, { useState, useRef } from 'react';
 import { X, Crop, Check, RefreshCw, ZoomIn, ZoomOut, LayoutGrid, Maximize2 } from 'lucide-react';
 
@@ -15,6 +16,7 @@ export default function ImageCropModal({
     projectCategory = '',
     projectDescription = ''
 }) {
+    const [overlayRef, dismiss] = useMotionDismiss(onCancel);
     const [zoom, setZoom] = useState(1);
     const [pan, setPan] = useState({ x: 0, y: 0 });
     const [isDragging, setIsDragging] = useState(false);
@@ -72,22 +74,22 @@ export default function ImageCropModal({
     const displayDesc = projectDescription.trim() || 'Deskripsi singkat proyek akan tampil di sini sesuai dengan yang Anda ketikkan pada form...';
 
     return (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
+        <div ref={overlayRef}
+            className="cmp-admin-overlay fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
             <div className="relative w-full max-w-4xl max-h-[94vh] overflow-y-auto rounded-3xl bg-white shadow-2xl border border-slate-100 p-6 sm:p-8 text-slate-800 my-auto"
-                 onClick={e => e.stopPropagation()}
-                 style={{ animation: 'scaleIn 0.3s cubic-bezier(0.34,1.56,0.64,1)' }}>
+                 onClick={e => e.stopPropagation()}>
                 
                 {/* Header */}
                 <div className="flex items-center justify-between pb-4 border-b border-slate-100">
                     <div>
                         <h3 className="font-bold text-xl text-slate-900 flex items-center gap-2">
-                            <Crop size={20} className="text-[#007CA7]" /> Sesuaikan Posisi & Preview Foto Proyek
+                            <Crop size={20} className="text-cmp-blue" /> Sesuaikan Posisi & Preview Foto Proyek
                         </h3>
                         <p className="text-xs text-slate-500 mt-1">
                             Geser dan sesuaikan zoom gambar. Tampilan akan otomatis terupdate di kedua simulasi di bawah.
                         </p>
                     </div>
-                    <button onClick={onCancel} className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition">
+                    <button onClick={dismiss} className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition">
                         <X size={18} />
                     </button>
                 </div>
@@ -95,7 +97,7 @@ export default function ImageCropModal({
                 {/* Kontrol Zoom & Reset */}
                 <div className="my-5 flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
                     <span className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
-                        <Crop size={15} className="text-[#007CA7]" /> Atur Zoom Gambar (Geser untuk fokus):
+                        <Crop size={15} className="text-cmp-blue" /> Atur Zoom Gambar (Geser untuk fokus):
                     </span>
                     <div className="flex items-center gap-3">
                         <ZoomOut size={15} className="text-slate-400" />
@@ -106,13 +108,13 @@ export default function ImageCropModal({
                             step="0.05"
                             value={zoom}
                             onChange={(e) => setZoom(parseFloat(e.target.value))}
-                            className="w-40 sm:w-56 accent-[#007CA7] cursor-pointer"
+                            className="w-40 sm:w-56 accent-cmp-blue cursor-pointer"
                         />
                         <ZoomIn size={15} className="text-slate-400" />
                         <button
                             type="button"
                             onClick={() => { setZoom(1); setPan({ x: 0, y: 0 }); }}
-                            className="ml-2 flex items-center gap-1 text-xs text-slate-600 hover:text-[#007CA7] px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 font-medium transition"
+                            className="ml-2 flex items-center gap-1 text-xs text-slate-600 hover:text-cmp-blue px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 font-medium transition"
                         >
                             <RefreshCw size={12} /> Reset
                         </button>
@@ -125,7 +127,7 @@ export default function ImageCropModal({
                     {/* PREVIEW 1: TAMPILAN LUAR (PERSIS SEPERTI CARD WEBSITE UTAMA) */}
                     <div className="flex flex-col items-center">
                         <div className="flex items-center gap-2 text-xs font-bold text-slate-700 mb-2 uppercase tracking-wider">
-                            <LayoutGrid size={15} className="text-[#007CA7]" /> 1. Tampilan Luar (Card Website Utama)
+                            <LayoutGrid size={15} className="text-cmp-blue" /> 1. Tampilan Luar (Card Website Utama)
                         </div>
                         <p className="text-[11px] text-slate-500 text-center mb-3">
                             Geser gambar di dalam kartu ini untuk menyesuaikan fokusnya:
@@ -148,27 +150,27 @@ export default function ImageCropModal({
                                     }}
                                     className="max-w-none w-full h-full object-cover pointer-events-none"
                                 />
-                                <span className="absolute top-3 left-3 z-20 rounded-full bg-white/95 backdrop-blur px-3 py-1 text-xs font-semibold text-[#007CA7] shadow-sm pointer-events-none">
+                                <span className="absolute top-3 left-3 z-20 rounded-full bg-white/95 backdrop-blur px-3 py-1 text-xs font-semibold text-cmp-blue shadow-sm pointer-events-none">
                                     {displayCategory}
                                 </span>
                             </div>
 
                             <div className="flex flex-col p-4 sm:p-5 h-[120px] sm:h-[135px]">
-                                <h2 className="text-sm sm:text-base font-bold text-[#03365b] line-clamp-2 leading-tight">
+                                <h2 className="text-sm sm:text-base font-bold text-cmp-navy line-clamp-2 leading-tight">
                                     {displayTitle}
                                 </h2>
                                 <p className="mt-1 text-xs text-gray-600 leading-relaxed line-clamp-2 flex-1">
                                     {displayDesc}
                                 </p>
                             </div>
-                            <div className="h-1 w-full bg-[#007CA7]" />
+                            <div className="h-1 w-full bg-cmp-blue" />
                         </div>
                     </div>
 
                     {/* PREVIEW 2: TAMPILAN DALAM (SIMULASI MODAL DETAIL SAAT CARD DIBUKA) */}
                     <div className="flex flex-col items-center border-t md:border-t-0 md:border-l border-slate-200 pt-5 md:pt-0 md:pl-6">
                         <div className="flex items-center gap-2 text-xs font-bold text-slate-700 mb-2 uppercase tracking-wider">
-                            <Maximize2 size={15} className="text-[#007CA7]" /> 2. Tampilan Dalam (Saat Membuka Card)
+                            <Maximize2 size={15} className="text-cmp-blue" /> 2. Tampilan Dalam (Saat Membuka Card)
                         </div>
                         <p className="text-[11px] text-slate-500 text-center mb-3">
                             Bisa digeser & di-zoom juga, hasilnya sinkron secara realtime:
@@ -197,11 +199,11 @@ export default function ImageCropModal({
 
                             <div className="p-4 bg-white border-t border-slate-100 flex flex-col justify-center">
                                 <div className="flex items-center gap-2 mb-1">
-                                    <span className="inline-block rounded-full bg-[#007CA7]/10 px-2.5 py-0.5 text-[11px] font-semibold text-[#007CA7]">
+                                    <span className="inline-block rounded-full bg-cmp-blue/10 px-2.5 py-0.5 text-[11px] font-semibold text-cmp-blue">
                                         {displayCategory}
                                     </span>
                                 </div>
-                                <h3 className="text-xs sm:text-sm font-bold text-[#03365b] line-clamp-1">
+                                <h3 className="text-xs sm:text-sm font-bold text-cmp-navy line-clamp-1">
                                     {displayTitle}
                                 </h3>
                                 <p className="mt-0.5 text-[11px] text-gray-500 line-clamp-1">
@@ -217,7 +219,7 @@ export default function ImageCropModal({
                 <div className="flex gap-3 pt-6 border-t border-slate-100 mt-6">
                     <button
                         type="button"
-                        onClick={onCancel}
+                        onClick={dismiss}
                         className="flex-1 py-3 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-sm font-semibold transition"
                     >
                         Batal
@@ -225,7 +227,7 @@ export default function ImageCropModal({
                     <button
                         type="button"
                         onClick={handleCropApply}
-                        className="flex-1 py-3 rounded-xl bg-[#007CA7] hover:bg-[#005f80] text-white text-sm font-bold flex items-center justify-center gap-2 transition shadow-lg shadow-[#007CA7]/20"
+                        className="flex-1 py-3 rounded-xl bg-cmp-blue hover:bg-cmp-navy text-white text-sm font-bold flex items-center justify-center gap-2 transition shadow-lg shadow-cmp-blue/20"
                     >
                         <Check size={18} /> Simpan Foto Terpilih
                     </button>

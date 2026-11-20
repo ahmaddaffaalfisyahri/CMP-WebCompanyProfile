@@ -1,8 +1,10 @@
+import useMotionDismiss from '../../hooks/useMotionDismiss';
 import React, { useState } from 'react';
 import { Settings, X, AlertCircle, User, Lock, Eye, EyeOff, Loader2, Save } from 'lucide-react';
 import { API, getAuthHeaders } from '../../utils/api';
 
 export default function ProfileConfigModal({ currentUser, onClose, onUpdated }) {
+    const [overlayRef, dismiss] = useMotionDismiss(onClose);
     const [currentPassword, setCurrentPassword] = useState('');
     const [newUsername, setNewUsername]         = useState(currentUser?.username || 'cmp');
     const [newPassword, setNewPassword]         = useState('');
@@ -68,18 +70,18 @@ export default function ProfileConfigModal({ currentUser, onClose, onUpdated }) 
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-            onClick={onClose}
+            ref={overlayRef}
+            className="cmp-admin-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+            onClick={dismiss}
         >
             <div
                 className="relative w-full max-w-md rounded-3xl bg-white shadow-2xl p-6 sm:p-8 text-slate-800"
                 onClick={e => e.stopPropagation()}
-                style={{ animation: 'scaleIn 0.3s cubic-bezier(0.34,1.56,0.64,1)' }}
             >
                 {/* Header */}
                 <div className="flex items-center justify-between pb-4 border-b border-slate-100">
                     <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-2xl bg-sky-50 flex items-center justify-center text-[#007CA7]">
+                        <div className="h-10 w-10 rounded-2xl bg-cmp-blue-soft flex items-center justify-center text-cmp-blue">
                             <Settings size={20} />
                         </div>
                         <div>
@@ -88,7 +90,7 @@ export default function ProfileConfigModal({ currentUser, onClose, onUpdated }) 
                         </div>
                     </div>
                     <button
-                        onClick={onClose}
+                        onClick={dismiss}
                         className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 transition cursor-pointer"
                     >
                         <X size={16} />
@@ -118,7 +120,7 @@ export default function ProfileConfigModal({ currentUser, onClose, onUpdated }) 
                                 value={newUsername}
                                 onChange={(e) => setNewUsername(e.target.value)}
                                 placeholder="Username admin"
-                                className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 text-sm font-medium focus:border-[#007CA7] focus:ring-2 focus:ring-[#007CA7]/20 outline-none transition"
+                                className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 text-sm font-medium focus:border-cmp-blue focus:ring-2 focus:ring-cmp-blue/20 outline-none transition"
                             />
                         </div>
                     </div>
@@ -138,7 +140,7 @@ export default function ProfileConfigModal({ currentUser, onClose, onUpdated }) 
                                 value={currentPassword}
                                 onChange={(e) => setCurrentPassword(e.target.value)}
                                 placeholder="Ketik password saat ini"
-                                className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-300 text-sm focus:border-[#007CA7] focus:ring-2 focus:ring-[#007CA7]/20 outline-none transition"
+                                className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-300 text-sm focus:border-cmp-blue focus:ring-2 focus:ring-cmp-blue/20 outline-none transition"
                             />
                             <button
                                 type="button"
@@ -169,7 +171,7 @@ export default function ProfileConfigModal({ currentUser, onClose, onUpdated }) 
                                     value={newPassword}
                                     onChange={(e) => setNewPassword(e.target.value)}
                                     placeholder="Password baru (min. 5 karakter)"
-                                    className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-300 text-sm focus:border-[#007CA7] focus:ring-2 focus:ring-[#007CA7]/20 outline-none transition"
+                                    className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-300 text-sm focus:border-cmp-blue focus:ring-2 focus:ring-cmp-blue/20 outline-none transition"
                                 />
                                 <button
                                     type="button"
@@ -189,7 +191,7 @@ export default function ProfileConfigModal({ currentUser, onClose, onUpdated }) 
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                     placeholder="Ulangi password baru"
-                                    className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:border-[#007CA7] focus:ring-2 focus:ring-[#007CA7]/20 outline-none transition"
+                                    className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:border-cmp-blue focus:ring-2 focus:ring-cmp-blue/20 outline-none transition"
                                 />
                             </div>
                         )}
@@ -199,7 +201,7 @@ export default function ProfileConfigModal({ currentUser, onClose, onUpdated }) 
                     <div className="flex gap-3 pt-3">
                         <button
                             type="button"
-                            onClick={onClose}
+                            onClick={dismiss}
                             className="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-sm font-semibold transition cursor-pointer"
                         >
                             Batal
@@ -207,7 +209,7 @@ export default function ProfileConfigModal({ currentUser, onClose, onUpdated }) 
                         <button
                             type="submit"
                             disabled={loading}
-                            className="flex-1 py-2.5 rounded-xl bg-[#007CA7] hover:bg-[#005f80] text-white text-sm font-bold flex items-center justify-center gap-2 transition disabled:opacity-60 shadow cursor-pointer"
+                            className="flex-1 py-2.5 rounded-xl bg-cmp-blue hover:bg-cmp-navy text-white text-sm font-bold flex items-center justify-center gap-2 transition disabled:opacity-60 shadow cursor-pointer"
                         >
                             {loading ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                             <span>Simpan Profil</span>

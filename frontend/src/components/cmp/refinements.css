@@ -5,17 +5,10 @@
 .cmp-site .close, .cmp-site .gallery-control { display: inline-flex; align-items: center; justify-content: center; }
 .cmp-site dialog { margin: auto; }
 .cmp-site .pagination { display: flex; justify-content: center; gap: 10px; margin-top: 32px; }
-.cmp-site .photo-dots { display: flex; justify-content: center; padding: 4px; }
-.cmp-site .photo-dots button { width: 30px; height: 30px; border: 0; background: transparent; display: grid; place-items: center; }
-.cmp-site .photo-dots button::after { content: ''; width: 7px; height: 7px; background: var(--border); border-radius: 50%; }
-.cmp-site .photo-dots button[aria-pressed=true]::after { background: var(--navy); }
-.cmp-site .photo-placeholder { min-height: 205px; display: grid; place-items: center; padding: 36px; color: var(--muted); }
+.cmp-site .photo-placeholder { position: absolute; inset: 0; display: grid; place-items: center; padding: 28px; color: var(--muted); }
 .cmp-site .footer-description { margin-top: 14px; }
 .cmp-site .form input:focus-visible, .cmp-site .form textarea:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
 .cmp-site button:disabled { opacity: .65; cursor: wait; }
 .cmp-site .contact-row a { overflow-wrap: anywhere; }
-.cmp-site .reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s, transform .6s; }
-.cmp-site .reveal.revealed { opacity: 1; transform: none; }
 .cmp-site .hero-photo { pointer-events: none; }
 @media (max-width: 370px) { .cmp-site .hero h1 { font-size: 39px; } .cmp-site .missions { grid-template-columns: 1fr; } }
-@media (prefers-reduced-motion: reduce) { .cmp-site .reveal { opacity: 1; transform: none; } }

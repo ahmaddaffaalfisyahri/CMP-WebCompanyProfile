@@ -1,16 +1,18 @@
+import useMotionDismiss from '../../hooks/useMotionDismiss';
 import React from 'react';
 import { AlertCircle } from 'lucide-react';
 
 export default function ConfirmDialog({ message, onConfirm, onCancel }) {
+    const [overlayRef, dismiss] = useMotionDismiss(onCancel);
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-            onClick={onCancel}
+            ref={overlayRef}
+            className="cmp-admin-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+            onClick={dismiss}
         >
             <div
                 className="w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl text-slate-800"
                 onClick={e => e.stopPropagation()}
-                style={{ animation: 'scaleIn 0.25s cubic-bezier(0.34,1.56,0.64,1)' }}
             >
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-50 text-rose-500 mb-4">
                     <AlertCircle size={24} />
@@ -20,7 +22,7 @@ export default function ConfirmDialog({ message, onConfirm, onCancel }) {
                 <div className="mt-6 flex gap-3">
                     <button
                         type="button"
-                        onClick={onCancel}
+                        onClick={dismiss}
                         className="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-semibold transition cursor-pointer"
                     >
                         Batal

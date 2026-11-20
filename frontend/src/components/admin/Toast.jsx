@@ -10,13 +10,13 @@ export default function Toast({ message, type = 'success', onClose }) {
     const colors = {
         success: 'bg-emerald-500',
         error:   'bg-red-500',
-        info:    'bg-[#007CA7]',
+        info:    'bg-cmp-blue',
     };
 
     return (
         <div
-            className={`fixed bottom-6 right-6 z-[100] flex items-center gap-3 rounded-2xl px-5 py-4 text-white shadow-2xl ${colors[type] || colors.info}`}
-            style={{ animation: 'slideUp 0.3s ease' }}
+            role="status"
+            className={`cmp-admin-toast fixed bottom-6 right-6 z-[100] flex items-center gap-3 rounded-2xl px-5 py-4 text-white shadow-2xl ${colors[type] || colors.info}`}
         >
             {type === 'success' && <CheckCircle2 size={20} />}
             {type === 'error'   && <AlertCircle  size={20} />}

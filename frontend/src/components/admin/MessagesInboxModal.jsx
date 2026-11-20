@@ -1,8 +1,10 @@
+import useMotionDismiss from '../../hooks/useMotionDismiss';
 import React, { useState, useEffect } from 'react';
 import { Mail, X, Loader2, Inbox, Trash2, CheckSquare, Square } from 'lucide-react';
 import { API, getAuthHeaders } from '../../utils/api';
 
 export default function MessagesInboxModal({ onClose }) {
+    const [overlayRef, dismiss] = useMotionDismiss(onClose);
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -52,17 +54,17 @@ export default function MessagesInboxModal({ onClose }) {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-            onClick={onClose}
+            ref={overlayRef}
+            className="cmp-admin-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+            onClick={dismiss}
         >
             <div
                 className="relative w-full max-w-4xl max-h-[92vh] overflow-y-auto rounded-3xl bg-white shadow-2xl p-6 sm:p-8 text-slate-800"
                 onClick={e => e.stopPropagation()}
-                style={{ animation: 'scaleIn 0.3s cubic-bezier(0.34,1.56,0.64,1)' }}
             >
                 <div className="flex items-center justify-between pb-4 border-b border-slate-100">
                     <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-2xl bg-sky-50 flex items-center justify-center text-[#007CA7]">
+                        <div className="h-10 w-10 rounded-2xl bg-cmp-blue-soft flex items-center justify-center text-cmp-blue">
                             <Mail size={20} />
                         </div>
                         <div>
@@ -71,7 +73,7 @@ export default function MessagesInboxModal({ onClose }) {
                         </div>
                     </div>
                     <button
-                        onClick={onClose}
+                        onClick={dismiss}
                         className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 transition cursor-pointer"
                     >
                         <X size={16} />
@@ -80,7 +82,7 @@ export default function MessagesInboxModal({ onClose }) {
 
                 {loading ? (
                     <div className="py-16 flex justify-center">
-                        <Loader2 size={32} className="text-[#007CA7] animate-spin" />
+                        <Loader2 size={32} className="text-cmp-blue animate-spin" />
                     </div>
                 ) : messages.length === 0 ? (
                     <div className="py-16 text-center">
@@ -95,13 +97,13 @@ export default function MessagesInboxModal({ onClose }) {
                                 key={msg.id}
                                 className={`p-4 rounded-2xl border transition ${
                                     msg.status === 'unread'
-                                        ? 'bg-sky-50/50 border-[#007CA7]/30'
+                                        ? 'bg-cmp-blue-soft/50 border-cmp-blue/30'
                                         : 'bg-white border-slate-200'
                                 }`}
                             >
                                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
                                     <div className="flex items-center gap-2">
-                                        <h4 className="font-bold text-sm text-[#03365b]">{msg.name}</h4>
+                                        <h4 className="font-bold text-sm text-cmp-navy">{msg.name}</h4>
                                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                                             msg.status === 'unread'
                                                 ? 'bg-amber-100 text-amber-800'

@@ -1,8 +1,10 @@
+import useMotionDismiss from '../../hooks/useMotionDismiss';
 import React, { useState, useEffect } from 'react';
 import { Sliders, X, Loader2, Save, LayoutGrid, Phone } from 'lucide-react';
 import { API, getAuthHeaders } from '../../utils/api';
 
 export default function WebsiteSettingsModal({ onClose, onSaved }) {
+    const [overlayRef, dismiss] = useMotionDismiss(onClose);
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(true);
     const [hero, setHero] = useState({
@@ -78,17 +80,17 @@ export default function WebsiteSettingsModal({ onClose, onSaved }) {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-            onClick={onClose}
+            ref={overlayRef}
+            className="cmp-admin-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+            onClick={dismiss}
         >
             <div
                 className="relative w-full max-w-2xl max-h-[92vh] overflow-y-auto rounded-3xl bg-white shadow-2xl p-6 sm:p-8 text-slate-800"
                 onClick={e => e.stopPropagation()}
-                style={{ animation: 'scaleIn 0.3s cubic-bezier(0.34,1.56,0.64,1)' }}
             >
                 <div className="flex items-center justify-between pb-4 border-b border-slate-100">
                     <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-2xl bg-sky-50 flex items-center justify-center text-[#007CA7]">
+                        <div className="h-10 w-10 rounded-2xl bg-cmp-blue-soft flex items-center justify-center text-cmp-blue">
                             <Sliders size={20} />
                         </div>
                         <div>
@@ -97,7 +99,7 @@ export default function WebsiteSettingsModal({ onClose, onSaved }) {
                         </div>
                     </div>
                     <button
-                        onClick={onClose}
+                        onClick={dismiss}
                         className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 transition cursor-pointer"
                     >
                         <X size={16} />
@@ -106,13 +108,13 @@ export default function WebsiteSettingsModal({ onClose, onSaved }) {
 
                 {fetching ? (
                     <div className="py-12 flex justify-center">
-                        <Loader2 size={30} className="text-[#007CA7] animate-spin" />
+                        <Loader2 size={30} className="text-cmp-blue animate-spin" />
                     </div>
                 ) : (
                     <form onSubmit={handleSave} className="mt-5 space-y-6">
                         {/* Section 1: Hero Stats */}
                         <div>
-                            <h4 className="text-xs font-bold uppercase tracking-wider text-[#007CA7] mb-3 flex items-center gap-1.5">
+                            <h4 className="text-xs font-bold uppercase tracking-wider text-cmp-blue mb-3 flex items-center gap-1.5">
                                 <LayoutGrid size={14} /> 1. Angka Statistik Hero Beranda
                             </h4>
                             <div className="grid grid-cols-3 gap-3">
@@ -122,7 +124,7 @@ export default function WebsiteSettingsModal({ onClose, onSaved }) {
                                         type="number"
                                         value={hero.establishedYear}
                                         onChange={e => setHero({ ...hero, establishedYear: e.target.value })}
-                                        className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm focus:border-[#007CA7] outline-none"
+                                        className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm focus:border-cmp-blue outline-none"
                                         placeholder="1997"
                                     />
                                 </div>
@@ -132,7 +134,7 @@ export default function WebsiteSettingsModal({ onClose, onSaved }) {
                                         type="number"
                                         value={hero.countriesCount}
                                         onChange={e => setHero({ ...hero, countriesCount: e.target.value })}
-                                        className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm focus:border-[#007CA7] outline-none"
+                                        className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm focus:border-cmp-blue outline-none"
                                         placeholder="7"
                                     />
                                 </div>
@@ -142,7 +144,7 @@ export default function WebsiteSettingsModal({ onClose, onSaved }) {
                                         type="number"
                                         value={hero.yearsExperience}
                                         onChange={e => setHero({ ...hero, yearsExperience: e.target.value })}
-                                        className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm focus:border-[#007CA7] outline-none"
+                                        className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm focus:border-cmp-blue outline-none"
                                         placeholder="25"
                                     />
                                 </div>
@@ -151,7 +153,7 @@ export default function WebsiteSettingsModal({ onClose, onSaved }) {
 
                         {/* Section 2: Typewriter Phrases */}
                         <div>
-                            <label className="block text-xs font-bold uppercase tracking-wider text-[#007CA7] mb-1.5">
+                            <label className="block text-xs font-bold uppercase tracking-wider text-cmp-blue mb-1.5">
                                 2. Teks Berjalan Beranda (1 Baris = 1 Kalimat)
                             </label>
                             <textarea
@@ -159,13 +161,13 @@ export default function WebsiteSettingsModal({ onClose, onSaved }) {
                                 value={phraseInput}
                                 onChange={e => setPhraseInput(e.target.value)}
                                 placeholder="Tulis kalimat berjalan (pisahkan per baris)..."
-                                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-800 focus:border-[#007CA7] outline-none font-mono"
+                                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-800 focus:border-cmp-blue outline-none font-mono"
                             />
                         </div>
 
                         {/* Section 3: Contact Info */}
                         <div className="pt-4 border-t border-slate-100">
-                            <h4 className="text-xs font-bold uppercase tracking-wider text-[#007CA7] mb-3 flex items-center gap-1.5">
+                            <h4 className="text-xs font-bold uppercase tracking-wider text-cmp-blue mb-3 flex items-center gap-1.5">
                                 <Phone size={14} /> 3. Informasi Kontak & Kantor
                             </h4>
                             <div className="space-y-3">
@@ -175,7 +177,7 @@ export default function WebsiteSettingsModal({ onClose, onSaved }) {
                                         rows={2}
                                         value={contact.address}
                                         onChange={e => setContact({ ...contact, address: e.target.value })}
-                                        className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:border-[#007CA7] outline-none"
+                                        className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:border-cmp-blue outline-none"
                                         placeholder="Alamat lengkap kantor..."
                                     />
                                 </div>
@@ -186,7 +188,7 @@ export default function WebsiteSettingsModal({ onClose, onSaved }) {
                                             type="text"
                                             value={contact.phone}
                                             onChange={e => setContact({ ...contact, phone: e.target.value })}
-                                            className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:border-[#007CA7] outline-none"
+                                            className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:border-cmp-blue outline-none"
                                             placeholder="+6221 – 5401398"
                                         />
                                     </div>
@@ -196,7 +198,7 @@ export default function WebsiteSettingsModal({ onClose, onSaved }) {
                                             type="email"
                                             value={contact.email}
                                             onChange={e => setContact({ ...contact, email: e.target.value })}
-                                            className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:border-[#007CA7] outline-none"
+                                            className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:border-cmp-blue outline-none"
                                             placeholder="info@ciptamajupersada.com"
                                         />
                                     </div>
@@ -207,7 +209,7 @@ export default function WebsiteSettingsModal({ onClose, onSaved }) {
                                         type="url"
                                         value={contact.mapsUrl}
                                         onChange={e => setContact({ ...contact, mapsUrl: e.target.value })}
-                                        className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:border-[#007CA7] outline-none"
+                                        className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:border-cmp-blue outline-none"
                                         placeholder="https://maps.app.goo.gl/..."
                                     />
                                 </div>
@@ -218,7 +220,7 @@ export default function WebsiteSettingsModal({ onClose, onSaved }) {
                         <div className="flex gap-3 pt-3 border-t border-slate-100">
                             <button
                                 type="button"
-                                onClick={onClose}
+                                onClick={dismiss}
                                 className="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-sm font-semibold transition cursor-pointer"
                             >
                                 Batal
@@ -226,7 +228,7 @@ export default function WebsiteSettingsModal({ onClose, onSaved }) {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="flex-1 py-2.5 rounded-xl bg-[#007CA7] hover:bg-[#005f80] text-white text-sm font-bold flex items-center justify-center gap-2 transition disabled:opacity-60 shadow cursor-pointer"
+                                className="flex-1 py-2.5 rounded-xl bg-cmp-blue hover:bg-cmp-navy text-white text-sm font-bold flex items-center justify-center gap-2 transition disabled:opacity-60 shadow cursor-pointer"
                             >
                                 {loading ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                                 <span>Simpan Pengaturan</span>
