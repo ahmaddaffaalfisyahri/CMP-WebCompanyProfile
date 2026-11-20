@@ -1,0 +1,194 @@
+{
+  "assets": {
+    "537": "/cmp/537.jpg",
+    "806": "/cmp/806.jpg",
+    "825": "/cmp/825.jpg",
+    "856": "/cmp/856.jpg",
+    "859": "/cmp/859.jpg",
+    "881": "/cmp/881.jpg",
+    "884": "/cmp/884.jpg",
+    "887": "/cmp/887.jpg",
+    "890": "/cmp/890.jpg",
+    "901": "/cmp/901.jpg",
+    "904": "/cmp/904.jpg",
+    "907": "/cmp/907.jpg",
+    "912": "/cmp/912.jpg",
+    "915": "/cmp/915.jpg",
+    "936": "/cmp/936.jpg",
+    "942": "/cmp/942.jpg",
+    "945": "/cmp/945.jpg",
+    "948": "/cmp/948.jpg",
+    "951": "/cmp/951.jpg",
+    "969": "/cmp/969.jpg",
+    "972": "/cmp/972.jpg",
+    "975": "/cmp/975.jpg",
+    "978": "/cmp/978.jpg",
+    "1006": "/cmp/1006.jpg",
+    "1009": "/cmp/1009.jpg",
+    "1012": "/cmp/1012.jpg",
+    "1015": "/cmp/1015.jpg",
+    "1033": "/cmp/1033.jpg",
+    "1038": "/cmp/1038.jpg",
+    "1041": "/cmp/1041.jpg",
+    "1069": "/cmp/1069.jpg",
+    "1072": "/cmp/1072.jpg",
+    "1077": "/cmp/1077.jpg",
+    "1080": "/cmp/1080.jpg",
+    "1103": "/cmp/1103.jpg",
+    "1106": "/cmp/1106.jpg",
+    "1109": "/cmp/1109.jpg",
+    "1124": "/cmp/1124.jpg",
+    "1127": "/cmp/1127.jpg",
+    "1226": "/cmp/1226.jpg",
+    "1240": "/cmp/1240.jpg",
+    "1268": "/cmp/1268.jpg",
+    "logo": "/cmp/logo.png"
+  },
+  "projects": [
+    {
+      "id": "cmp-0",
+      "client": "Adaro Indonesia",
+      "title": "Hopper 3 & 5",
+      "category": "Electrical",
+      "description": "Electrical system rehabilitation, installation and PLC & SCADA modification at the Adaro Kelanis site.",
+      "scope": [
+        "Dismantling existing electrical system",
+        "Design new electrical system",
+        "Supply and install cables, lighting and cable trays",
+        "PLC & SCADA program modification",
+        "Test & commissioning"
+      ],
+      "images": [
+        "/cmp/904.jpg",
+        "/cmp/912.jpg",
+        "/cmp/907.jpg",
+        "/cmp/915.jpg",
+        "/cmp/901.jpg"
+      ]
+    },
+    {
+      "id": "cmp-1",
+      "client": "AMMAN Mineral Internasional",
+      "title": "EPC for New Warehouse Building",
+      "category": "Mechanical",
+      "description": "Mechanical, electrical and piping installation for the office, warehouse and workshop.",
+      "scope": [
+        "Power and control cables, cable ladder, tray and conduits",
+        "Distribution panels, lighting, lightning protection and grounding",
+        "Fire hydrant piping, sprinklers and hose reels",
+        "Addressable fire alarm",
+        "Testing & commissioning, radiographic testing and hydrotest"
+      ],
+      "images": [
+        "/cmp/936.jpg",
+        "/cmp/942.jpg",
+        "/cmp/945.jpg",
+        "/cmp/948.jpg",
+        "/cmp/951.jpg"
+      ]
+    },
+    {
+      "id": "cmp-2",
+      "client": "AKR Corporindo",
+      "title": "Tank Monitoring & Management System",
+      "category": "Automation",
+      "description": "Integrated electrical and instrumentation systems for tank conversion, ATG and SCADA.",
+      "scope": [
+        "Supply and install ATG monitoring panel",
+        "Cabling, ladder, tray and conduit",
+        "PLC data transfer to batch controllers and client database",
+        "PLC & SCADA control and monitoring program"
+      ],
+      "images": [
+        "/cmp/1226.jpg",
+        "/cmp/975.jpg",
+        "/cmp/978.jpg",
+        "/cmp/972.jpg",
+        "/cmp/969.jpg"
+      ]
+    },
+    {
+      "id": "cmp-3",
+      "client": "AKR Corporindo",
+      "title": "Electrical Assessment, Repair & Upgrade",
+      "category": "Electrical",
+      "description": "Inspection, testing, assessment and upgrades for electrical systems at AKR Terminal.",
+      "scope": [
+        "Electrical panel inspection and assessment",
+        "Electrical testing and measurement",
+        "Insulation and grounding resistance test",
+        "UPS check, installation and commissioning",
+        "Distribution panel repair and upgrade",
+        "MCB, cable, soft starter and earthing installation"
+      ],
+      "images": [
+        "/cmp/1240.jpg",
+        "/cmp/1012.jpg",
+        "/cmp/1006.jpg",
+        "/cmp/1009.jpg",
+        "/cmp/1015.jpg"
+      ]
+    },
+    {
+      "id": "cmp-4",
+      "client": "XL Smart Telecom Sejahtera",
+      "title": "Steam Trap Monitoring & Assessment",
+      "category": "Automation",
+      "description": "Wireless steam trap monitoring system installation and commissioning at South Lampung.",
+      "scope": [
+        "4 repeater transmitter 708 units",
+        "1 gateway panel in the control room",
+        "34 steam trap monitoring sensors",
+        "Power and control cables for data acquisition",
+        "PC server and Plantweb Insight configuration",
+        "Signal testing, SAT and commissioning"
+      ],
+      "images": [
+        "/cmp/537.jpg",
+        "/cmp/1038.jpg",
+        "/cmp/1041.jpg",
+        "/cmp/1033.jpg"
+      ]
+    },
+    {
+      "id": "cmp-5",
+      "client": "Sari Dumai Oleo",
+      "title": "CCTV & Switch Installation",
+      "category": "IT & Network",
+      "description": "Integrated fibre-optic backbone, switches, CCTV and network infrastructure.",
+      "scope": [
+        "Supply and install CCTV",
+        "IT switches and panels",
+        "Power and data cables including fibre optic",
+        "Network configuration",
+        "Test & commissioning including OTDR report"
+      ],
+      "images": [
+        "/cmp/1072.jpg",
+        "/cmp/1080.jpg",
+        "/cmp/1077.jpg",
+        "/cmp/1069.jpg"
+      ]
+    },
+    {
+      "id": "cmp-6",
+      "client": "Gree Energy",
+      "title": "Biogas Electrical & Automation",
+      "category": "Automation",
+      "description": "End-to-end electrical and automation package for a biogas plant.",
+      "scope": [
+        "Lighting, earthing and lightning protection",
+        "PLC and SCADA control and monitoring",
+        "Electrical power and control design",
+        "MCC, control and remote control panel fabrication and installation",
+        "Testing, commissioning and engineering"
+      ],
+      "images": [
+        "/cmp/1268.jpg",
+        "/cmp/1103.jpg",
+        "/cmp/1106.jpg",
+        "/cmp/1109.jpg"
+      ]
+    }
+  ]
+}

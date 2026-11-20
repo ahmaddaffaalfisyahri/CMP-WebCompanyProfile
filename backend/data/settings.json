@@ -1,0 +1,20 @@
+{
+  "hero": {
+    "establishedYear": 1997,
+    "countriesCount": 7,
+    "yearsExperience": 25,
+    "typewriterPhrases": [
+      "Marine & Coal Mining Solutions",
+      "Engineering, Procurement, and Construction",
+      "Automation & System Integration",
+      "Software & Control Systems"
+    ]
+  },
+  "contact": {
+    "address": "Kompleks Prima Center 1, Block I no.8 Jl. Pool PPD, Kedaung, Kaliangke, Jakarta Barat 11710, Indonesia.",
+    "phone": "+6221 - 5401398",
+    "whatsapp": "+62 812 3456 7890",
+    "email": "info@ciptamajupersada.com",
+    "mapsUrl": "https://maps.app.goo.gl/dEeGuaCdcD5qDn3x5"
+  }
+}
