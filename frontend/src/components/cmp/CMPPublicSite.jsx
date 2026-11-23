@@ -67,7 +67,7 @@ export default function CMPPublicSite() {
 
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
       root.querySelectorAll('main .section').forEach(section => {
-        section.querySelectorAll('.eyebrow, h2, .lead, .about-img, .milestone, .service, .project, .contact-row, .form > :not(.small)').forEach(registerReveal);
+        section.querySelectorAll('.eyebrow, h2, .lead, .about-img, .cmp-glance-list > li, .service, .project, .contact-row, .form > :not(.small)').forEach(registerReveal);
       });
       const direction = root.querySelector('.direction');
       if (direction) {

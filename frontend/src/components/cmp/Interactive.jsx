@@ -62,14 +62,36 @@ function ProjectCard({ project, onOpen }) {
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const { active, previous } = useProjectSlides(project.images, hovered || focused);
-  return <article className="project" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} onFocus={() => setFocused(true)} onBlur={e => { if (!e.currentTarget.contains(e.relatedTarget)) setFocused(false); }}>
-    <div className="project-media"><button className="project-photo" onClick={() => onOpen(project)} aria-label={`View gallery: ${project.title}`}>
-      {project.images.length ? <ProjectSlides images={project.images} title={project.title} active={active} previous={previous} lazy /> : <span className="photo-placeholder">Project documentation coming soon</span>}
-      <span className="tag">{project.category}</span>
-    </button>
-    </div>
-    <div className="project-copy">{project.client && <span className="client">{project.client}</span>}<h3>{project.title}</h3><p>{project.description}</p><button className="detail" onClick={() => onOpen(project)}>View project details</button></div>
-  </article>;
+  return (
+    <article
+      className="project"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
+    >
+      <div className="project-photo">
+        {project.images.length ? (
+          <ProjectSlides images={project.images} title={project.title} active={active} previous={previous} lazy />
+        ) : <span className="photo-placeholder">Project documentation coming soon</span>}
+        <span className="tag">{project.category}</span>
+      </div>
+      <div className="project-copy">
+        {project.client && <span className="client">{project.client}</span>}
+        <h3>{project.title}</h3>
+        <p>{project.description}</p>
+        <button
+          type="button"
+          className="detail"
+          aria-label={`View Project Details: ${project.title}`}
+          aria-haspopup="dialog"
+          onClick={() => onOpen(project)}
+        >
+          View Project Details <ArrowRight size={16} aria-hidden="true" />
+        </button>
+      </div>
+    </article>
+  );
 }
 
 function Gallery({ project, previous, next, onSelect, onClose }) {

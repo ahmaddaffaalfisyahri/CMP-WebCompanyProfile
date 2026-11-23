@@ -52,15 +52,40 @@ html:has(.cmp-site){--cmp-nav-height:56px;scroll-behavior:smooth;scroll-padding-
 .cmp-site .split{display:grid;grid-template-columns:1fr 1fr;gap:65px;align-items:center}
 .cmp-site .about-img{position:relative}
 .cmp-site .about-img>img{height:390px;width:100%;object-fit:cover;border-radius:14px}
-.cmp-site .est{position:absolute;bottom:22px;left:22px;background:white;padding:16px 22px;border-left:5px solid var(--red);border-radius:4px;box-shadow:0 8px 24px #01006622}
-.cmp-site .est strong{display:block;font-size:32px;color:var(--navy);line-height:1}
-.cmp-site .est small{font-size:13px;color:var(--muted)}
-.cmp-site .timeline{margin:24px 0 0;padding-left:18px;border-left:2px solid var(--border)}
-.cmp-site .milestone{position:relative;padding:0 0 15px 5px}
-.cmp-site .milestone:last-child{padding-bottom:0}
-.cmp-site .milestone:before{content:"";position:absolute;left:-25px;top:6px;width:12px;height:12px;border:3px solid white;border-radius:50%;background:var(--red);box-shadow:0 0 0 1px var(--border)}
-.cmp-site .milestone strong{color:var(--navy);font-size:15px}
-.cmp-site .milestone p{font-size:13px}
+.cmp-site .cmp-glance {
+  container-type: inline-size;
+  margin-top: 28px;
+}
+.cmp-site .cmp-glance-list {
+  display: grid;
+  grid-template-columns: minmax(0, .86fr) minmax(0, 1fr) minmax(0, 1.14fr);
+  gap: clamp(10px, 3cqi, 18px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-wrap: anywhere;
+}
+.cmp-site .cmp-glance-value {
+  display: block;
+  color: var(--navy);
+  font-size: clamp(17px, 5.5cqi, 30px);
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  line-height: 1.15;
+}
+.cmp-site .cmp-glance-label {
+  display: block;
+  margin-top: 8px;
+  color: var(--navy);
+  font-size: clamp(12px, 3.5cqi, 14px);
+  font-weight: 700;
+  line-height: 1.35;
+}
+.cmp-site .cmp-glance-list p {
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1.45;
+}
 .cmp-site .sectionhead{margin-bottom:35px;display:flex;justify-content:space-between;align-items:flex-end;gap:40px}
 .cmp-site .sectionhead .lead{max-width:435px;margin:0}
 .cmp-site .direction{display:grid;grid-template-columns:1fr 1.35fr;gap:20px}
@@ -96,19 +121,81 @@ html:has(.cmp-site){--cmp-nav-height:56px;scroll-behavior:smooth;scroll-padding-
 .cmp-site .filter{border:1px solid var(--border);background:white;color:var(--navy);border-radius:24px;padding:9px 17px;font-weight:700;font-size:13px}
 .cmp-site .filter.active{background:var(--navy);color:white;border-color:var(--navy)}
 .cmp-site #projects > .wrap{max-width:1140px;scroll-margin-block:14px}
-.cmp-site .projects{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
-.cmp-site .projects > .project:only-child{grid-column:1/-1;justify-self:center;width:min(100%,558px)}
-.cmp-site .project{border:1px solid var(--border);background:white;border-radius:14px;overflow:hidden;display:grid;grid-template-columns:minmax(0, .85fr) minmax(0, 1fr);min-width:0;transition:box-shadow .25s,border-color .25s}
-.cmp-site .project:hover{border-color:var(--tint);box-shadow:0 8px 20px #01006612}
-.cmp-site .project-media{display:flex;flex-direction:column;min-width:0;background:var(--gray)}
-.cmp-site .project-photo{position:relative;border:0;padding:0;display:block;width:100%;flex:1;min-height:155px;aspect-ratio:4/3;background:var(--gray);text-align:left}
+.cmp-site .projects {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+}
+@media (min-width: 671px) {
+  .cmp-site .projects { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; }
+}
+@media (min-width: 1200px) {
+  .cmp-site .projects { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.cmp-site .project {
+  --project-card-transition: transform 250ms var(--motion-ease), box-shadow 250ms var(--motion-ease), border-color 250ms var(--motion-ease);
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--white);
+  box-shadow: 0 2px 8px #0100660a;
+  text-align: left;
+  transition: var(--project-card-transition);
+}
+.cmp-site .project:hover {
+  transform: translateY(-3px);
+  border-color: var(--tint);
+  box-shadow: 0 8px 20px #01006614;
+}
+.cmp-site .project-photo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--gray);
+}
 .cmp-site .project-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .cmp-site .tag{position:absolute;top:13px;left:13px;font-size:11px;font-weight:700;color:var(--navy);background:white;padding:5px 11px;border-radius:20px}
-.cmp-site .project-copy{padding:clamp(16px, 2vw, 22px);display:flex;flex-direction:column;flex:1}
+.cmp-site .project-copy{padding:clamp(16px, 2vw, 22px);display:flex;flex-direction:column;flex:1;overflow-wrap:anywhere}
 .cmp-site .client{font-size:11px;letter-spacing:.09em;color:var(--muted);font-weight:bold;text-transform:uppercase;margin-bottom:8px}
-.cmp-site .project h3{font-size:19px;line-height:1.22}
-.cmp-site .project p{font-size:14px;line-height:1.5;margin:8px 0 14px}
-.cmp-site .detail{margin-top:auto;align-self:flex-start;padding:0;background:none;border:0;color:var(--navy);font-weight:700;font-size:13px;border-bottom:2px solid var(--red)}
+.cmp-site .project h3{font-size:20px;line-height:1.22}
+.cmp-site .project-copy > p {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 8px 0 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+.cmp-site .detail {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 7px;
+  margin-top: auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: left;
+  transition: color 250ms var(--motion-ease);
+}
+.cmp-site .detail::after {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  content: "";
+}
+.cmp-site .project:hover .detail, .cmp-site .detail:focus-visible { color: var(--hover); }
+.cmp-site .detail:focus-visible::after { outline: 3px solid var(--red); outline-offset: -3px; }
 .cmp-site .commitment{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .cmp-site .commitment article{border:1px solid var(--border);border-radius:12px;padding:28px;background:white}
 .cmp-site .commitment .ico{margin-bottom:20px}
@@ -258,10 +345,6 @@ html:has(.cmp-site){--cmp-nav-height:56px;scroll-behavior:smooth;scroll-padding-
   line-height: 1.5;
 }
 .cmp-site .dialog-body li::marker { color: var(--cta-hover); }
-@media (max-width: 850px) {
-  .cmp-site #projects .projects { grid-template-columns: minmax(0, 1fr); }
-  .cmp-site .projects > .project:only-child { width: 100%; }
-}
 @media (min-width: 671px) {
   .cmp-site .project-gallery[open] {
     min-height: min(82dvh, 640px, calc(100dvh - 32px));
@@ -270,10 +353,6 @@ html:has(.cmp-site){--cmp-nav-height:56px;scroll-behavior:smooth;scroll-padding-
 @media (max-width: 670px) {
   .cmp-site .project-gallery[open] { grid-template-columns: minmax(0, 1fr); }
   .cmp-site .gallery-stage { min-height: clamp(155px, 32dvh, 270px); }
-}
-@media (max-width: 430px) {
-  .cmp-site .project { grid-template-columns: minmax(0, 1fr); }
-  .cmp-site .project-photo { aspect-ratio: 16/9; }
 }
 .cmp-site .gallery-project-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: auto; padding-top: clamp(16px, 3dvh, 28px); }
 .cmp-site .gallery-project-nav button {
@@ -303,7 +382,6 @@ html:has(.cmp-site){--cmp-nav-height:56px;scroll-behavior:smooth;scroll-padding-
 .cmp-site .section{padding:65px 0}
 .cmp-site .sectionhead{display:block}
 .cmp-site .sectionhead .lead{margin-top:14px;max-width:680px}
-.cmp-site #projects > .wrap{max-width:840px}
 .cmp-site .service{padding:20px}
 .cmp-site .direction{grid-template-columns:1fr 1.3fr}
 .cmp-site .contact-grid{gap:32px}
@@ -334,7 +412,6 @@ html:has(.cmp-site){--cmp-nav-height:56px;scroll-behavior:smooth;scroll-padding-
 .cmp-site .vision{padding:23px}
 .cmp-site .strip-copy{padding:42px 18px 0}
 .cmp-site .strip img{height:220px}
-.cmp-site #projects > .wrap{max-width:420px}
 .cmp-site .team-img{height:240px}
 .cmp-site .form{padding:22px}
 .cmp-site .footbase{flex-direction:column;gap:8px}

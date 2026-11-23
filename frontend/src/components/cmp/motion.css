@@ -78,13 +78,14 @@
   translate: none;
 }
 .cmp-site [data-reveal]:focus-within { transition-delay: 0ms; }
+.cmp-site .cmp-glance-list > li { --motion-reveal: 720ms; }
 
-.cmp-site .btn, .cmp-site .filter, .cmp-site .detail {
+.cmp-site .btn, .cmp-site .filter {
   transition: translate var(--motion-fast) var(--motion-ease), scale var(--motion-fast) var(--motion-ease),
     background-color var(--motion-fast), border-color var(--motion-fast), color var(--motion-fast), box-shadow var(--motion-fast);
 }
 .cmp-site .btn:hover:not(:disabled) { transform: none; translate: 0 -2px; box-shadow: 0 6px 18px rgb(224 0 0 / .22); }
-.cmp-site :is(.btn, .filter, .detail):active:not(:disabled) { scale: .98; }
+.cmp-site :is(.btn, .filter):active:not(:disabled) { scale: .98; }
 .cmp-site .form :is(input, textarea) { transition: border-color var(--motion-fast), box-shadow var(--motion-fast); }
 .cmp-site .form :is(input, textarea):focus { border-color: var(--cta); box-shadow: 0 0 0 3px rgb(224 0 0 / .12); }
 .cmp-site .form label:has(+ :focus) { color: var(--cta-hover); }
@@ -103,18 +104,26 @@
   animation: cmp-rise 740ms var(--motion-reveal-ease) var(--direction-delay, 0ms) both;
 }
 .cmp-site :is(.vision, .mission, .about-img):hover {
-  transform: translateY(-4px);
   box-shadow: 0 10px 24px rgb(1 0 102 / .12), 0 2px var(--red);
 }
+.cmp-site :is(.vision, .about-img):hover { transform: translateY(-4px); }
+.cmp-site .mission:hover {
+  z-index: 1;
+  transform: scale(1.04);
+}
 .cmp-site :is(.vision, .about-img) { overflow: hidden; }
-.cmp-site :is(.vision, .about-img) img, .cmp-site .project-photo img {
+.cmp-site :is(.vision, .about-img) img {
   transition: scale var(--motion-card) var(--motion-ease);
 }
-.cmp-site :is(.vision, .about-img, .project-photo):hover img { scale: 1.04; }
-.cmp-site .project-photo { overflow: hidden; }
+.cmp-site :is(.vision, .about-img):hover img { scale: 1.04; }
+.cmp-site .project[data-reveal] {
+  transition: var(--reveal-transition), var(--project-card-transition);
+}
+.cmp-site .project-photo img { transition: scale 250ms var(--motion-ease); }
+.cmp-site .project:hover .project-photo img { scale: 1.04; }
 .cmp-site .service {
   --service-hover-color: var(--cmp-cta-hover, #B80000);
-  --service-color-duration: 1050ms;
+  --service-color-duration: 360ms;
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -122,11 +131,13 @@
     opacity var(--motion-reveal) var(--motion-reveal-ease) var(--reveal-delay, 0ms),
     translate var(--motion-reveal) var(--motion-reveal-ease) var(--reveal-delay, 0ms),
     transform var(--motion-card) var(--motion-ease),
+    border-top-color var(--service-color-duration) ease-in-out,
     box-shadow var(--service-color-duration) ease-in-out;
 }
 .cmp-site .service:hover {
   z-index: 1;
   transform: scale(1.025);
+  border-top-color: var(--red);
   box-shadow: 0 8px 24px rgb(1 0 102 / .07), 0 4px 18px rgb(224 0 0 / .07);
 }
 .cmp-site .service h3 { transition: color var(--service-color-duration) ease-in-out; }
@@ -142,8 +153,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .cmp-site [data-reveal] { opacity: 1; translate: none; }
-  .cmp-site :is(.btn, .service, .vision, .mission, .about-img):hover { transform: none; translate: none; }
-  .cmp-site :is(.header a, .vision, .about-img, .project-photo):hover img,
+  .cmp-site :is(.btn, .service, .vision, .mission, .about-img, .project):hover { transform: none; translate: none; }
+  .cmp-site :is(.header a, .vision, .about-img):hover img,
+  .cmp-site .project:hover .project-photo img,
   .cmp-site .service:hover .ico { scale: 1; }
   .cmp-site .service:hover .index { translate: none; }
 }

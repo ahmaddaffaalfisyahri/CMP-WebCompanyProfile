@@ -12,7 +12,7 @@ export function useInView(threshold = 0.15, rootMargin = "0px", once = false) {
 
     useEffect(() => {
         const el = ref.current;
-        if (!el) return;
+        if (!el || typeof IntersectionObserver === 'undefined') return;
 
         const observer = new IntersectionObserver(
             ([entry]) => {
