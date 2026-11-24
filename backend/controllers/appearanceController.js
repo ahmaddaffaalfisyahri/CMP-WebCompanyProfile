@@ -12,6 +12,7 @@ const textLimits = {
     address: 400,
     phone: 48,
     email: 254,
+    mapsUrl: 2048,
 };
 
 function isRecord(value) {
@@ -46,6 +47,7 @@ function validateAppearance(body, savedPhotos) {
         if (name === 'heroTitle' && (trimmed.split('\n').length > 3 || trimmed.split('\n').some(line => !line.trim()))) return null;
         if (name === 'phone' && !/[0-9]/.test(trimmed)) return null;
         if (name === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) return null;
+        if (name === 'mapsUrl' && (!trimmed.startsWith('https://') || !URL.canParse(trimmed))) return null;
         cleanText[name] = trimmed;
     }
 

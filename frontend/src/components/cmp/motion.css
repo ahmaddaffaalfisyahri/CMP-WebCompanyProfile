@@ -1,8 +1,6 @@
 .cmp-site main, .cmp-site .footer { animation: cmp-fade var(--motion-reveal) var(--motion-ease) both; }
 
 @keyframes cmp-nav-in { from { opacity: 0; translate: 0 -12px; } }
-@keyframes cmp-photo-settle { from { scale: 1.045; } }
-@keyframes cmp-hero-light { from { transform: translateX(-45%); opacity: 0; } 45% { opacity: .65; } to { transform: translateX(40%); opacity: 0; } }
 @keyframes cmp-content-in { from { opacity: .7; translate: 0 7px; } }
 @keyframes cmp-spin { to { rotate: 360deg; } }
 
@@ -54,15 +52,6 @@
 .cmp-site .hero:not([data-hero-visible="false"]) .hero-copy > :nth-child(2) { animation-delay: 150ms; }
 .cmp-site .hero:not([data-hero-visible="false"]) .hero-copy > :nth-child(3) { animation-delay: 300ms; }
 .cmp-site .hero:not([data-hero-visible="false"]) .hero-copy > :nth-child(4) { animation-delay: 450ms; }
-.cmp-site .hero-photo { overflow: hidden; }
-.cmp-site .hero:not([data-hero-visible="false"]) .hero-photo img { animation: cmp-photo-settle 8s var(--motion-ease); }
-.cmp-site .hero:not([data-hero-visible="false"]) .hero-photo::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(115deg, transparent 30%, rgb(255 255 255 / .16), transparent 70%);
-  animation: cmp-hero-light 7s ease-out .4s both;
-}
 
 .cmp-site [data-reveal] {
   opacity: 0;
@@ -92,24 +81,23 @@
 .cmp-site .form .small span { display: inline-block; }
 .cmp-site .contact-spinner { animation: cmp-spin 850ms linear infinite; }
 
-.cmp-site :is(.vision, .mission, .about-img) {
+.cmp-site :is(.vision, .about-img) {
   --card-hover-transition: transform var(--motion-card) var(--motion-ease), box-shadow var(--motion-card) var(--motion-ease);
   transition: var(--card-hover-transition);
 }
 .cmp-site .about-img[data-reveal] {
   transition: var(--reveal-transition), var(--card-hover-transition);
 }
+.cmp-site .mission[data-reveal] {
+  transition: var(--reveal-transition), var(--mission-hover-transition);
+}
 .cmp-site .direction :is(.vision, .mission)[data-reveal="shown"] {
   animation: cmp-rise 740ms var(--motion-reveal-ease) var(--direction-delay, 0ms) both;
 }
-.cmp-site :is(.vision, .mission, .about-img):hover {
+.cmp-site :is(.vision, .about-img):hover {
   box-shadow: 0 10px 24px rgb(1 0 102 / .12), 0 2px var(--red);
 }
 .cmp-site :is(.vision, .about-img):hover { transform: translateY(-4px); }
-.cmp-site .mission:hover {
-  z-index: 1;
-  transform: scale(1.04);
-}
 .cmp-site :is(.vision, .about-img) { overflow: hidden; }
 .cmp-site :is(.vision, .about-img) img {
   transition: scale var(--motion-card) var(--motion-ease);

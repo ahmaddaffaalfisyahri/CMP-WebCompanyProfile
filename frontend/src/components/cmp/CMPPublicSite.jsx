@@ -9,6 +9,7 @@ content.assets.logo = cmpLogo;
 import './prototype.css';
 import './refinements.css';
 import './motion.css';
+import './hero.css';
 const links = [['home', 'Home'], ['about', 'About Us'], ['solutions', 'Services'], ['projects', 'Portfolio']];
 const scrollKeys = new Set(['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' ']);
 
@@ -81,7 +82,7 @@ export default function CMPPublicSite() {
   useEffect(() => {
     const root = site.current;
     const navHeader = header.current;
-    const sections = [...root.querySelectorAll('main > section[id]')];
+    const sections = [...root.querySelectorAll('main section[id]')];
     let frame = 0;
     function updateHeader() {
       frame = 0;

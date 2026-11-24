@@ -12,6 +12,7 @@ export const defaultWebsiteText = {
   address: 'Komplek Grogol Permai Blok D4/D5, Jl. Dr. Latumenten, Grogol Petamburan, Jelambar.',
   phone: '+62 21-540-1398',
   email: 'info@ciptamajupersada.com',
+  mapsUrl: 'https://maps.app.goo.gl/eYFtcd3PDqLzWXcK6',
 };
 
 // Reference crop frames match the public layout at 1440 px and 390 px.
@@ -22,9 +23,8 @@ export const sectionPhotoGroups = [
     title: 'Beranda',
     photos: [
       {
-        slot: 'heroMain', label: 'Foto utama', original: '/cmp/806.jpg',
-        cropFrames: { desktop: 11 / 16, mobile: mobileHeroRatio },
-        desktopClip: 'polygon(18% 0, 100% 0, 100% 100%, 0 100%)',
+        slot: 'heroMain', label: 'Foto utama', original: '/cmp/hero-engineering.png',
+        cropFrames: { desktop: 10 / 7, mobile: 3 / 2 },
       },
       { slot: 'heroTop', label: 'Foto kanan atas', original: '/cmp/884.jpg', cropFrames: { desktop: 1, mobile: mobileHeroRatio } },
       { slot: 'heroBottom', label: 'Foto kanan bawah', original: '/cmp/887.jpg', cropFrames: { desktop: 1, mobile: mobileHeroRatio } },

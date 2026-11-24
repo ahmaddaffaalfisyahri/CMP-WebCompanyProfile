@@ -42,6 +42,7 @@ const textGroups = [
             { name: 'address', label: 'Alamat kantor', rows: 2, maxLength: 400 },
             { name: 'phone', label: 'Telepon kantor', type: 'tel', maxLength: 48 },
             { name: 'email', label: 'Email resmi', type: 'email', maxLength: 254 },
+            { name: 'mapsUrl', label: 'Link Google Maps', type: 'url', maxLength: 2048 },
         ],
     },
 ];
@@ -61,6 +62,9 @@ function textToSave(text, baseText) {
             }
             if (name === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(raw)) throw new Error('Periksa format email resmi.');
             if (name === 'phone' && !/\d/.test(raw)) throw new Error('Telepon kantor harus berisi angka.');
+            if (type === 'url' && (!raw.startsWith('https://') || !URL.canParse(raw))) {
+                throw new Error('Masukkan link Google Maps yang diawali https://.');
+            }
             if (value !== baseText[name]) changes[name] = value;
         }
     }

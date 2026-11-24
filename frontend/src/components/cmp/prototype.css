@@ -33,16 +33,7 @@ html:has(.cmp-site){--cmp-nav-height:56px;scroll-behavior:smooth;scroll-padding-
 .cmp-site .navlinks .btn{gap:8px;padding:8px 16px;font-size:13px}
 .cmp-site .navlinks a.active{border-color:var(--red)}
 .cmp-site .menu{display:none;border:0;background:white;color:var(--navy);font-size:26px}
-.cmp-site .hero{position:relative;overflow:hidden;background:var(--navy);color:white}
-.cmp-site .hero .wrap{display:grid;grid-template-columns:1fr 1fr;align-items:center;min-height:555px;position:relative;z-index:2}
-.cmp-site .hero-copy{padding:75px 50px 76px 0}
-.cmp-site .hero .eyebrow,.cmp-site .contact .eyebrow{color:white}
-.cmp-site .hero p{color:var(--tint);font-size:17px;max-width:470px;margin:23px 0 28px}
-.cmp-site .hero-actions{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-.cmp-site .hero-actions .textlink{font-size:14px;font-weight:700}
-.cmp-site .hero-photo{position:absolute;right:0;top:0;bottom:0;width:52%;display:grid;grid-template-columns:1.1fr .8fr;grid-template-rows:1fr 1fr;gap:5px;clip-path:polygon(10% 0,100% 0,100% 100%,0 100%);background:var(--navy)}
-.cmp-site .hero-photo img{width:100%;height:100%;object-fit:cover;min-height:0}
-.cmp-site .hero-photo .main{grid-row:span 2}
+.cmp-site .contact .eyebrow{color:white}
 .cmp-site .stats{background:white;border-bottom:1px solid var(--border)}
 .cmp-site .stats .wrap{display:grid;grid-template-columns:repeat(3,1fr);padding:24px 0}
 .cmp-site .stat{padding:8px 24px;border-left:1px solid var(--border);display:flex;align-items:center;gap:16px}
@@ -88,16 +79,120 @@ html:has(.cmp-site){--cmp-nav-height:56px;scroll-behavior:smooth;scroll-padding-
 }
 .cmp-site .sectionhead{margin-bottom:35px;display:flex;justify-content:space-between;align-items:flex-end;gap:40px}
 .cmp-site .sectionhead .lead{max-width:435px;margin:0}
-.cmp-site .direction{display:grid;grid-template-columns:1fr 1.35fr;gap:20px}
+.cmp-site .direction {
+  --vision-title-size: 30px;
+  --direction-accent-thickness: 3px;
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 20px;
+}
 .cmp-site .vision{background:var(--navy);color:white;border-radius:14px;padding:32px;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between}
-.cmp-site .vision h3{color:white;font-size:30px}
+.cmp-site .vision h3{color:white;font-size:var(--vision-title-size)}
+.cmp-site .vision h3::after {
+  content: "";
+  display: block;
+  width: 1.67em;
+  height: var(--direction-accent-thickness);
+  margin-top: 9px;
+  border-radius: 2px;
+  background-color: var(--red);
+}
 .cmp-site .vision p{color:var(--tint);margin-top:16px;font-size:16px}
 .cmp-site .vision img{height:150px;width:100%;object-fit:cover;border-radius:8px;margin-top:24px}
-.cmp-site .missions{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.cmp-site .mission{background:white;border:1px solid var(--border);border-radius:12px;padding:23px}
-.cmp-site .mission .index{color:var(--navy);font-size:23px;font-weight:800;border-bottom:3px solid var(--red);display:inline-block;margin-bottom:10px}
-.cmp-site .mission h3{font-size:18px;margin-bottom:8px}
-.cmp-site .mission p{font-size:14px}
+.cmp-site .missions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  gap: 16px;
+}
+.cmp-site .mission {
+  --mission-navy: #08065C;
+  --mission-silver: #E5E7EF;
+  --mission-red: #FF263D;
+  --mission-padding: clamp(18px, 1.6vw, 24px);
+  --mission-corner-height: clamp(76px, 7vw, 108px);
+  --mission-transition: 280ms ease-out;
+  --mission-hover-transition: transform var(--mission-transition), box-shadow var(--mission-transition);
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  padding: var(--mission-padding);
+  border: 1px solid #CBD0DF;
+  border-bottom: 3px solid var(--mission-silver);
+  border-radius: 15px;
+  background-color: var(--mission-navy);
+  box-shadow: 0 3px 10px rgb(8 6 92 / 8%);
+  transition: var(--mission-hover-transition);
+}
+.cmp-site .mission-number {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 8px;
+  min-height: calc(var(--mission-corner-height) - var(--mission-padding) + 4px);
+  color: #FFFFFF;
+  font-size: var(--vision-title-size);
+  font-weight: 800;
+  line-height: 1;
+}
+.cmp-site .mission-number::after {
+  content: "";
+  width: 27px;
+  height: var(--direction-accent-thickness);
+  border-radius: 2px;
+  background-color: var(--mission-red);
+}
+.cmp-site .mission-corner {
+  position: absolute;
+  inset: 0 0 auto auto;
+  width: max(38%, 92px);
+  height: var(--mission-corner-height);
+  pointer-events: none;
+}
+.cmp-site .mission-corner-shape {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: var(--mission-silver);
+}
+.cmp-site .mission-corner-accent {
+  fill: none;
+  stroke: var(--mission-red);
+  stroke-width: var(--direction-accent-thickness);
+}
+.cmp-site .mission-icon {
+  position: absolute;
+  top: 42%;
+  left: 75%;
+  width: clamp(34px, 2.7vw, 38px);
+  height: auto;
+  color: var(--mission-navy);
+  translate: -50% -50%;
+  transition: scale var(--mission-transition);
+}
+.cmp-site .mission-copy { overflow-wrap: anywhere; }
+.cmp-site .mission h3 {
+  margin-bottom: 8px;
+  color: #FFFFFF;
+  font-size: 18px;
+  line-height: 1.2;
+}
+.cmp-site .mission p {
+  color: #D5D9E9;
+  font-size: 14px;
+  line-height: 1.5;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .cmp-site .mission:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 18px rgb(8 6 92 / 16%);
+  }
+  .cmp-site .mission:hover .mission-icon { scale: 1.05; }
+}
+@media (min-width: 671px) and (max-width: 950px) {
+  .cmp-site .mission { --mission-padding: 16px; }
+  .cmp-site .mission h3 { min-height: 2.4em; }
+}
 .cmp-site .services{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .cmp-site .service {
   padding: 27px;
@@ -376,16 +471,14 @@ html:has(.cmp-site){--cmp-nav-height:56px;scroll-behavior:smooth;scroll-padding-
 .cmp-site .notice{font-size:12px;margin-top:12px;color:var(--muted)}
 @media(max-width:950px){.cmp-site .wrap{width:calc(100% - 48px)}
 .cmp-site .navlinks{gap:17px}
-.cmp-site .hero .wrap{min-height:490px}
-.cmp-site .hero-copy{padding-right:20px}
 .cmp-site .split{gap:32px}
 .cmp-site .section{padding:65px 0}
 .cmp-site .sectionhead{display:block}
 .cmp-site .sectionhead .lead{margin-top:14px;max-width:680px}
 .cmp-site .service{padding:20px}
 .cmp-site .direction{grid-template-columns:1fr 1.3fr}
+.cmp-site .mission h3{font-size:16px}
 .cmp-site .contact-grid{gap:32px}
-.cmp-site .hero-photo{width:49%}
 }@media(max-width:670px){html:has(.cmp-site){--cmp-nav-height:52px}
 .cmp-site .wrap{width:calc(100% - 36px)}
 .cmp-site .logo{width:95px}
@@ -394,11 +487,6 @@ html:has(.cmp-site){--cmp-nav-height:56px;scroll-behavior:smooth;scroll-padding-
 .cmp-site .navlinks{display:none;position:absolute;top:100%;left:0;right:0;background:white;box-shadow:0 8px 16px #01006616;padding:15px 18px;align-items:stretch;flex-direction:column;gap:3px}
 .cmp-site .navlinks.open{display:flex}
 .cmp-site .navlinks a:not(.btn){padding:10px 0;border-bottom-width:1px}
-.cmp-site .hero .wrap{display:block;min-height:0}
-.cmp-site .hero-copy{padding:48px 0 35px}
-.cmp-site .hero-photo{position:relative;clip-path:none;width:100%;height:270px;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr}
-.cmp-site .hero-photo .main{grid-row:auto}
-.cmp-site .hero p{font-size:15px}
 .cmp-site .stats .wrap{grid-template-columns:1fr;gap:10px;padding:15px 0}
 .cmp-site .stat,.cmp-site .stat:first-child{padding:9px 0;border:0;border-bottom:1px solid var(--border)}
 .cmp-site .stat:last-child{border:0}
@@ -407,15 +495,14 @@ html:has(.cmp-site){--cmp-nav-height:56px;scroll-behavior:smooth;scroll-padding-
 .cmp-site .split,.cmp-site .direction,.cmp-site .strip,.cmp-site .contact-grid,.cmp-site .footgrid{grid-template-columns:1fr;gap:25px}
 .cmp-site .about-img>img{height:260px}
 .cmp-site .services,.cmp-site .commitment{grid-template-columns:1fr}
-.cmp-site .missions{gap:10px}
-.cmp-site .mission{padding:16px}
+.cmp-site .missions{grid-template-columns:minmax(0,1fr);gap:10px}
+.cmp-site .mission h3{font-size:18px}
 .cmp-site .vision{padding:23px}
 .cmp-site .strip-copy{padding:42px 18px 0}
 .cmp-site .strip img{height:220px}
 .cmp-site .team-img{height:240px}
 .cmp-site .form{padding:22px}
 .cmp-site .footbase{flex-direction:column;gap:8px}
-.cmp-site .hero h1{font-size:45px}
 .cmp-site .sectionhead{margin-bottom:25px}
 }@media(prefers-reduced-motion:reduce){html:has(.cmp-site){scroll-behavior:auto}
 .cmp-site *{transition:none!important}

@@ -1,7 +1,7 @@
 import useMotionDismiss from '../../hooks/useMotionDismiss';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
-import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, LoaderCircle, X, Mail, MapPin, Phone } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, ExternalLink, LoaderCircle, X, Mail, MapPin, Phone } from 'lucide-react';
 import { API, imageUrl } from '../../utils/api';
 import { getBundledProjects, publicApiEnabled } from '../../utils/websiteSettings.js';
 import { animatePageScroll, prefersReducedMotion } from '../../utils/scroll.js';
@@ -263,7 +263,18 @@ export function Contact({ contact }) {
     } catch { setStatus('error'); }
   }
   return <section className="section contact" id="contact"><div className="wrap contact-grid"><div><div className="eyebrow">Contact us</div><h2>Let’s Build<br />What’s Next.</h2><p className="lead">Get in touch with CMP for your next engineering project.</p><div className="contact-list">
-    <div className="contact-row"><MapPin /><div><strong>Office</strong><p>{contact.address}</p></div></div>
+    <div className="contact-row">
+      <MapPin aria-hidden="true" />
+      <div>
+        <strong>Office</strong>
+        <p>{contact.address}</p>
+        <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="maps-link">
+          <MapPin aria-hidden="true" />
+          <span>Open in Google Maps</span>
+          <ExternalLink aria-hidden="true" />
+        </a>
+      </div>
+    </div>
     <div className="contact-row"><Phone /><div><strong>Phone</strong><a href={`tel:${contact.phone.replace(/[^+\d]/g, '')}`}>{contact.phone}</a></div></div>
     <div className="contact-row"><Mail /><div><strong>Email</strong><a href={`mailto:${contact.email}`}>{contact.email}</a></div></div>
   </div></div><form className="form" onSubmit={submit}><h3>Send Us a Message.</h3><label htmlFor="name">Your name</label><input id="name" name="name" autoComplete="name" placeholder="Full name" required maxLength={120} /><label htmlFor="email">Email address</label><input id="email" name="email" type="email" autoComplete="email" placeholder="you@company.com" required maxLength={254} /><label htmlFor="message">Your message</label><textarea id="message" name="message" placeholder="Tell us about your project" required maxLength={5000} /><button className="btn" disabled={status === 'sending'}>{status === 'sending' ? <><LoaderCircle className="contact-spinner" size={16} aria-hidden="true" />Sending…</> : status === 'success' ? 'Send Another Message' : 'Send Message'}</button>
