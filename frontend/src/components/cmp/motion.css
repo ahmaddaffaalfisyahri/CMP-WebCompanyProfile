@@ -11,8 +11,7 @@
   transition: background-color var(--motion-card), box-shadow var(--motion-card);
 }
 .cmp-site .header.is-scrolled {
-  background: rgb(255 255 255 / .93);
-  backdrop-filter: blur(10px);
+  background: rgb(255 255 255 / .97);
   box-shadow: 0 4px 18px rgb(1 0 102 / .08);
 }
 .cmp-site .header .logo { transition: scale var(--motion-fast) var(--motion-ease); }

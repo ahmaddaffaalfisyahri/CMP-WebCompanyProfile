@@ -20,7 +20,7 @@ Project ini dibangun dengan arsitektur bersih (*Clean Code & Decoupled Architect
   - [Akses Login Admin](#akses-login-admin)
   - [1. Manajemen Portofolio Proyek (Tambah, Edit, & Crop Foto)](#1-manajemen-portofolio-proyek)
   - [2. Kotak Masuk Pesan (Inbox Leads)](#2-kotak-masuk-pesan-inbox-leads)
-  - [3. Pengaturan Tampilan Web (Hero Stats, Teks Berjalan, & Kontak)](#3-pengaturan-tampilan-web)
+  - [3. Pengaturan Tampilan Web](#3-pengaturan-tampilan-web)
   - [4. Pengaturan Akun & Keamanan Password](#4-pengaturan-akun--keamanan-password)
 - [FAQ & Troubleshooting](#-faq--troubleshooting)
 
@@ -269,12 +269,96 @@ cd frontend && npm install && npm run dev
 ---
 
 ### 3. Pengaturan Tampilan Web
-- Klik tombol **`Pengaturan Web`** di header admin.
-- Anda dapat mengedit konten dinamis tanpa coding:
-  1. **Angka Statistik Hero Beranda:** Tahun Berdiri (*Est. Year*), Jangkauan Negara (*Countries*), dan Tahun Pengalaman (*Years Experience*).
-  2. **Teks Berjalan Beranda (Typewriter):** Mengubah atau menambah baris teks slogan berjalan di landing page utama.
-  3. **Informasi Kontak & Kantor:** Alamat kantor, telepon resmi, WhatsApp, email resmi, dan link Google Maps.
-- Klik **"Simpan Pengaturan"** dan perubahan langsung tampil di website secara seketika!
+
+Buka **Pengaturan Web** di dashboard admin. **Konten & kontak** mengatur judul dan deskripsi Beranda, informasi About Us, serta alamat, telepon, dan email. **Foto halaman** mengatur lima foto di Beranda, About Us, dan Vision & Mission.
+
+Foto proyek dikelola lewat **Portfolio Projects → Proyek dari Database → Edit Proyek**. Pada formulir proyek, editor foto menampilkan pratinjau kartu dan galeri.
+
+Untuk foto halaman, **Ganti foto** membuka editor untuk foto baru dan **Crop / Zoom** membuka editor untuk foto yang sedang dipakai. Pilih bingkai **Desktop** atau **Mobile** sesuai posisi foto. Klik **Simpan Foto Terpilih** untuk menerapkan crop, lalu **Simpan Pengaturan**. **Foto asli** memulihkan foto bawaan di posisi tersebut.
+
+Pengaturan disimpan oleh Express di `backend/data/appearance.json`, dan file foto baru disimpan di `backend/uploads/`. Pada VPS, kedua lokasi tersebut harus persisten dan dapat ditulis oleh proses Node. Pengaturan tampilan dapat dibaca halaman publik meskipun integrasi proyek PostgreSQL dan formulir kontak masih dinonaktifkan.
+
+#### Deploy frontend dan API di VPS
+
+Contoh ini memakai Ubuntu/Debian dengan Nginx yang melayani website langsung. Jika VPS memakai panel atau proxy lain untuk SSL, gunakan pengaturan domain dan sertifikat dari layanan tersebut. Untuk versi Vite di proyek ini, gunakan Node.js 22.12 atau lebih baru.
+
+**1. Perbarui checkout dan jalankan backend**
+
+Masuk lewat SSH dan buka folder clone yang dipakai deploy. Lanjutkan jika branch yang dipakai adalah `main` dan working tree bersih. Simpan cadangan konfigurasi, data PostgreSQL, dan unggahan sebelum memperbarui produksi.
+
+```bash
+git status --short --branch
+git pull --ff-only origin main
+git log -1 --oneline
+npm --prefix backend ci --omit=dev
+npm --prefix frontend ci --include=dev
+```
+
+Pertahankan `backend/.env` yang sudah dipakai VPS. Cocokkan `PORT`, `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, dan `DB_PASSWORD` dengan layanan di VPS. Saat konfigurasi pertama kali, isi juga `ADMIN_USER`, `ADMIN_PASSWORD`, dan `AUTH_SECRET`. Git memperbarui kode. Restore PostgreSQL dan salin unggahan secara terpisah jika datanya masih ada di Mac. Pertahankan `backend/data/` dan `backend/uploads/` antar-deploy.
+
+Restart proses Node melalui pengelola yang sudah digunakan. Untuk PM2, lihat nama di `pm2 list`, lalu gunakan `pm2 restart NAMA_PROSES --update-env`. Jika PM2 sudah terpasang dan layanan ini belum dibuat, jalankan `pm2 start server.js --name cmp-api` dari folder `backend` agar `dotenv` membaca file yang benar. Untuk systemd, restart unit backend yang sudah ada.
+
+```bash
+curl -fsS http://127.0.0.1:3001/api/health
+curl -fsS http://127.0.0.1:3001/api/projects
+```
+
+Gunakan port dari `backend/.env` jika berbeda. `health` memeriksa Express. `projects` menjalankan query PostgreSQL. Respons `[]` berarti query berhasil dan tabel proyek kosong.
+
+**2. Hubungkan DNS dan Nginx**
+
+Buat record DNS `A` bernama `cmp-api` dengan nilai IP publik VPS. Gunakan `AAAA` hanya jika VPS melayani IPv6. Pastikan port TCP 80 dan 443 dapat diakses dari internet. Port Express dan PostgreSQL cukup digunakan secara internal.
+
+Tambahkan server block berikut untuk API, misalnya di `/etc/nginx/sites-available/cmp-api`. Jika blok dengan `server_name` ini sudah ada, edit blok tersebut. Untuk file baru pada instalasi Ubuntu/Debian standar, aktifkan dengan `sudo ln -s /etc/nginx/sites-available/cmp-api /etc/nginx/sites-enabled/cmp-api`.
+
+```nginx
+server {
+    listen 80;
+    server_name cmp-api.ciptamajupersada.com;
+    client_max_body_size 12m;
+
+    location / {
+        proxy_pass http://127.0.0.1:3001;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+`proxy_pass` meneruskan `/api/` dan `/uploads/` ke Express. Batas 12 MB memberi ruang untuk multipart dan batas foto 10 MB di backend.
+
+```bash
+sudo nginx -t && sudo systemctl reload nginx
+dig +short cmp-api.ciptamajupersada.com A
+curl -fsS http://cmp-api.ciptamajupersada.com/api/health
+```
+
+**3. Pasang sertifikat HTTPS**
+
+Gunakan Certbot yang sudah tersedia. Untuk instalasi baru dari paket Ubuntu/Debian, gunakan `sudo apt update && sudo apt install certbot python3-certbot-nginx`. Setelah DNS dan HTTP berhasil, terbitkan sertifikat API. Pastikan server block HTTP domain utama juga memiliki `server_name ciptamajupersada.com`. Jika sertifikat domain utama belum valid, terbitkan sertifikat untuk host tersebut juga.
+
+```bash
+sudo certbot --nginx -d cmp-api.ciptamajupersada.com
+sudo certbot --nginx -d ciptamajupersada.com
+sudo certbot renew --dry-run
+curl -fsS https://cmp-api.ciptamajupersada.com/api/health
+curl -fsS https://cmp-api.ciptamajupersada.com/api/projects
+curl -fsSI https://ciptamajupersada.com/
+```
+
+**4. Build dan publikasikan frontend**
+
+Gunakan commit yang sudah memuat dukungan `VITE_API_URL`. Jalankan build dari root repository. Vite memasukkan URL API ke bundle saat build.
+
+```bash
+VITE_API_URL=https://cmp-api.ciptamajupersada.com/api npm run build
+```
+
+Publikasikan isi `frontend/dist/` ke document root yang sudah dipakai website. Jika Nginx langsung memakai `frontend/dist/` sebagai root, hasil build sudah berada di lokasi tersebut. Pada server block website, gunakan `try_files $uri $uri/ /index.html;` di `location /` agar membuka `/admin` langsung juga bekerja. Verifikasi halaman utama, login admin, dan foto unggahan lewat browser.
+
+Untuk development, biarkan `VITE_API_URL` kosong. Vite meneruskan request relatif `/api` dan `/uploads` ke Express lokal.
 
 ---
 

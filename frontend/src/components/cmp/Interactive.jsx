@@ -1,13 +1,12 @@
 import useMotionDismiss from '../../hooks/useMotionDismiss';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, LoaderCircle, X, Mail, MapPin, Phone } from 'lucide-react';
-import content from './content.json';
-import { API } from '../../utils/api';
+import { API, imageUrl } from '../../utils/api';
+import { getBundledProjects, publicApiEnabled } from '../../utils/websiteSettings.js';
+import { animatePageScroll, prefersReducedMotion } from '../../utils/scroll.js';
 
 // Enable only after the target API and its data have been verified as CMP-owned.
-const apiEnabled = import.meta.env.VITE_CMP_API_ENABLED === 'true';
-const contactDefault = { address: 'Komplek Grogol Permai Blok D4/D5, Jl. Dr. Latumenten, Grogol Petamburan, Jelambar.', phone: '+62 21-540-1398', email: 'info@ciptamajupersada.com' };
 const validImage = value => typeof value === 'string' && /^\/(?:cmp|uploads)\/[a-zA-Z0-9_.-]+$/.test(value);
 
 function useProjectSlides(images, paused = false) {
@@ -27,7 +26,7 @@ function useProjectSlides(images, paused = false) {
     if (target === current.active) return;
     let cancelled = false;
     const image = new Image();
-    image.src = images[target];
+    image.src = imageUrl(images[target]);
     image.decode().then(() => {
       if (!cancelled) setSlides({ images, active: target, previous: current.active });
     }).catch(() => {
@@ -52,7 +51,7 @@ function ProjectSlides({ images, title, active, previous, lazy = false }) {
       aria-hidden={index !== active}
     >
       {(index === active || index === previous) && (
-        <img src={src} alt={index === active ? `${title} — photo ${index + 1}` : ''} loading={lazy && index === 0 && previous === -1 ? 'lazy' : undefined} />
+        <img src={imageUrl(src)} alt={index === active ? `${title} — photo ${index + 1}` : ''} loading={lazy && index === 0 && previous === -1 ? 'lazy' : undefined} />
       )}
     </span>
   ));
@@ -155,7 +154,7 @@ function Gallery({ project, previous, next, onSelect, onClose }) {
           <div className="gallery-thumbnails" role="group" aria-label="Project photos">
             {project.images.map((image, index) => (
               <button key={`${image}-${index}`} type="button" aria-label={`Show photo ${index + 1}`} aria-pressed={activePhoto === index} onClick={() => setPhoto(index)}>
-                <img src={image} alt="" loading="lazy" />
+                <img src={imageUrl(image)} alt="" loading="lazy" />
               </button>
             ))}
           </div>
@@ -185,26 +184,28 @@ function Gallery({ project, previous, next, onSelect, onClose }) {
   );
 }
 
-export function Portfolio() {
-  const [projects, setProjects] = useState(content.projects);
+export function Portfolio({ photos }) {
+  const [apiProjects, setApiProjects] = useState(null);
   const [category, setCategory] = useState('All');
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState(null);
   const projectGrid = useRef(null);
   const portfolioContent = useRef(null);
   const pageFade = useRef(null);
-  const pageScrollFrame = useRef(0);
+  const cancelPageScroll = useRef(null);
 
-  useEffect(() => () => cancelAnimationFrame(pageScrollFrame.current), []);
+  useEffect(() => () => cancelPageScroll.current?.(), []);
   useEffect(() => {
-    if (!apiEnabled) return;
+    if (!publicApiEnabled) return;
     const controller = new AbortController();
     fetch(`${API}/projects`, { signal: controller.signal }).then(res => { if (!res.ok) throw new Error('Project service unavailable'); return res.json(); }).then(data => {
       if (!Array.isArray(data) || !data.every(p => p.id != null && typeof p.title === 'string' && typeof p.category === 'string' && Array.isArray(p.images))) throw new Error('Invalid projects');
-      setProjects(data.map(p => ({ ...p, images: p.images.filter(validImage) })));
+      setApiProjects(data.map(p => ({ ...p, images: p.images.filter(validImage) })));
     }).catch(() => { /* Retain the documented CMP portfolio when the API is unavailable. */ });
     return () => controller.abort();
   }, []);
+  const fallbackProjects = useMemo(() => getBundledProjects(photos), [photos]);
+  const projects = apiProjects ?? fallbackProjects;
   const categories = ['All', ...new Set(projects.map(p => p.category))];
   const filtered = projects.filter(p => category === 'All' || p.category === category);
   const selectedIndex = selected ? filtered.findIndex(project => project.id === selected.id) : -1;
@@ -212,10 +213,10 @@ export function Portfolio() {
   const currentPage = Math.min(page, pages || 1);
 
   function goToPage(nextPage) {
-    cancelAnimationFrame(pageScrollFrame.current);
+    cancelPageScroll.current?.();
     if (nextPage === currentPage) return;
 
-    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reducedMotion = prefersReducedMotion();
     const startY = window.scrollY;
     const headerOffset = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
     const targetY = startY + portfolioContent.current.getBoundingClientRect().top - headerOffset - 24;
@@ -233,27 +234,10 @@ export function Portfolio() {
       }
     }
 
-    if (reducedMotion || Math.abs(targetY - startY) < 2) {
-      window.scrollTo({ top: targetY, behavior: 'instant' });
-      showPage();
-      return;
-    }
-
-    const startedAt = performance.now();
-    function advance(now) {
-      const progress = Math.min((now - startedAt) / 590, 1);
-      const eased = progress * progress * (3 - 2 * progress);
-      window.scrollTo({ top: startY + (targetY - startY) * eased, behavior: 'instant' });
-      if (progress < 1) {
-        pageScrollFrame.current = requestAnimationFrame(advance);
-      } else {
-        showPage();
-      }
-    }
-    pageScrollFrame.current = requestAnimationFrame(advance);
+    cancelPageScroll.current = animatePageScroll(targetY, 590, showPage);
   }
   return <section className="section" id="projects"><div className="wrap" ref={portfolioContent}><div className="sectionhead"><div><div className="eyebrow">Our work</div><h2>Proven Solutions.<br />Real Projects.</h2></div><p className="lead">Explore selected mechanical, electrical, automation and network projects.</p></div>
-    <div className="filters" role="group" aria-label="Filter projects">{categories.map(item => <button key={item} className={`filter ${item === category ? 'active' : ''}`} aria-pressed={item === category} onClick={() => { cancelAnimationFrame(pageScrollFrame.current); setCategory(item); setPage(1); }}>{item}</button>)}</div>
+    <div className="filters" role="group" aria-label="Filter projects">{categories.map(item => <button key={item} className={`filter ${item === category ? 'active' : ''}`} aria-pressed={item === category} onClick={() => { cancelPageScroll.current?.(); setCategory(item); setPage(1); }}>{item}</button>)}</div>
     <div className="projects" ref={projectGrid} tabIndex={-1}>{filtered.slice((currentPage - 1) * 6, currentPage * 6).map(project => <ProjectCard key={`${category}-${project.id}`} project={project} onOpen={setSelected} />)}</div>
     {!filtered.length && <p className="project-empty" role="status">No projects are available in this category yet.</p>}
     {pages > 1 && <nav className="pagination" aria-label="Project pages">{Array.from({ length: pages }, (_, i) => <button key={i} className={`filter ${currentPage === i + 1 ? 'active' : ''}`} aria-current={currentPage === i + 1 ? 'page' : undefined} onClick={() => goToPage(i + 1)}>{i + 1}</button>)}</nav>}
@@ -261,25 +245,15 @@ export function Portfolio() {
   </div></section>;
 }
 
-export function Contact() {
-  const [contact, setContact] = useState(contactDefault);
+export function Contact({ contact }) {
   const [status, setStatus] = useState('idle');
-  useEffect(() => {
-    if (!apiEnabled) return;
-    const controller = new AbortController();
-    fetch(`${API}/settings`, { signal: controller.signal }).then(r => { if (!r.ok) throw new Error('Settings unavailable'); return r.json(); }).then(result => {
-      const value = result.data?.contact;
-      if (result.ok && value && ['address', 'phone', 'email'].every(key => typeof value[key] === 'string' && value[key].trim())) setContact(value);
-    }).catch(() => {});
-    return () => controller.abort();
-  }, []);
   async function submit(event) {
     event.preventDefault();
     if (status === 'sending') return;
     const form = event.currentTarget;
     const values = Object.fromEntries(new FormData(form));
     if (Object.values(values).some(value => !value.trim())) { setStatus('invalid'); return; }
-    if (!apiEnabled) { setStatus('unavailable'); return; }
+    if (!publicApiEnabled) { setStatus('unavailable'); return; }
     setStatus('sending');
     try {
       const response = await fetch(`${API}/messages`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(values), signal: AbortSignal.timeout(15000) });

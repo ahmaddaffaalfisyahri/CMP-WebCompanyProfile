@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 
 import cmpLogo from '../assets/CMP_Logo_Transparant.png';
-import { API, getAuthHeaders } from '../utils/api';
+import { API, getAuthHeaders, imageUrl } from '../utils/api';
 
 // Admin Subcomponents
 import LoginPortal from '../components/admin/LoginPortal';
@@ -16,6 +16,69 @@ import ProfileConfigModal from '../components/admin/ProfileConfigModal';
 import ConfirmDialog from '../components/admin/ConfirmDialog';
 import Toast from '../components/admin/Toast';
 
+function ProjectsTable({ projects, onEdit, onDelete }) {
+    return (
+        <div className="overflow-x-auto rounded-3xl border border-slate-200 bg-white shadow-sm">
+            <table className="w-full text-left text-sm">
+                <thead className="border-b border-slate-100 bg-slate-50/75 text-xs font-bold uppercase tracking-wider text-slate-500">
+                    <tr>
+                        <th className="px-4 py-4 sm:px-6">Foto</th>
+                        <th className="px-4 py-4 sm:px-6">Proyek</th>
+                        <th className="hidden px-6 py-4 sm:table-cell">Kategori</th>
+                        <th className="hidden px-6 py-4 lg:table-cell">Deskripsi</th>
+                        <th className="px-4 py-4 text-right sm:px-6">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 text-slate-600">
+                    {projects.map(project => {
+                        const thumbnail = Array.isArray(project.images) ? project.images[0] : null;
+                        const category = project.category || project.tag || 'General';
+                        return (
+                            <tr key={project.id} className="transition hover:bg-slate-50/80">
+                                <td className="px-4 py-4 sm:px-6">
+                                    <div className="flex h-12 w-16 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-slate-100 sm:h-14 sm:w-20">
+                                        {thumbnail ? <img src={imageUrl(thumbnail)} alt="" loading="lazy" className="h-full w-full object-cover" /> : <ImageIcon size={20} className="text-slate-400" aria-hidden="true" />}
+                                    </div>
+                                </td>
+                                <td className="max-w-xs px-4 py-4 sm:px-6">
+                                    <div className="font-bold text-cmp-navy">{project.title}</div>
+                                    <div className="mt-1 text-xs text-slate-600 sm:hidden">{category}</div>
+                                </td>
+                                <td className="hidden px-6 py-4 sm:table-cell">
+                                    <span className="inline-block rounded-full bg-cmp-blue/10 px-3 py-1 text-xs font-semibold text-cmp-blue">{category}</span>
+                                </td>
+                                <td className="hidden max-w-sm truncate px-6 py-4 text-xs lg:table-cell">{project.description || '—'}</td>
+                                <td className="px-4 py-4 sm:px-6">
+                                    <div className="flex justify-end gap-1">
+                                        <button
+                                            type="button"
+                                            onClick={() => onEdit(project)}
+                                            className="inline-flex items-center gap-1.5 rounded-xl p-2 text-xs font-semibold text-cmp-navy hover:bg-cmp-blue-soft"
+                                            title="Edit Proyek"
+                                            aria-label={`Edit Proyek ${project.title}`}
+                                        >
+                                            <Pencil size={16} aria-hidden="true" />
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => onDelete(project)}
+                                            className="rounded-xl p-2 text-slate-500 hover:bg-rose-50 hover:text-rose-600"
+                                            title="Hapus Proyek"
+                                            aria-label={`Hapus Proyek ${project.title}`}
+                                        >
+                                            <Trash2 size={16} aria-hidden="true" />
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
+        </div>
+    );
+}
+
 export default function Admin() {
     const [authChecking, setAuthChecking] = useState(true);
     const [token, setToken]               = useState('');
@@ -23,6 +86,7 @@ export default function Admin() {
 
     const [projects, setProjects]         = useState([]);
     const [fetching, setFetching]         = useState(false);
+    const [projectsError, setProjectsError] = useState(false);
     const [formOpen, setFormOpen]         = useState(false);
     const [editing, setEditing]           = useState(null);
     const [saving, setSaving]             = useState(false);
@@ -34,6 +98,7 @@ export default function Admin() {
     const [toast, setToast]               = useState(null);
 
     const notify = (message, type = 'success') => setToast({ message, type });
+
 
     // ── Verify session token on mount ─────────────────────────────────────────
     useEffect(() => {
@@ -70,16 +135,20 @@ export default function Admin() {
     // ── Fetch Projects ────────────────────────────────────────────────────────
     const load = async () => {
         setFetching(true);
+        setProjectsError(false);
         try {
             const res = await fetch(`${API}/projects`, {
                 headers: getAuthHeaders()
             });
+            if (!res.ok) throw new Error('Gagal memuat proyek.');
             const data = await res.json();
-            setProjects(Array.isArray(data) ? data : []);
+            if (!Array.isArray(data)) throw new Error('Respons proyek tidak valid.');
+            setProjects(data);
         } catch {
-            notify('Gagal memuat proyek', 'error');
+            setProjectsError(true);
+        } finally {
+            setFetching(false);
         }
-        setFetching(false);
     };
 
     useEffect(() => {
@@ -97,6 +166,7 @@ export default function Admin() {
                 .catch(() => {});
         }
     }, [token]);
+
 
     // ── Save (create / update) ───────────────────────────────────────────────
     const handleSave = async (form) => {
@@ -202,11 +272,11 @@ export default function Admin() {
                             )}
                         </button>
 
-                        {/* Tombol Pengaturan Website (Hero & Kontak) */}
+                        {/* Tombol pengaturan konten dan foto website */}
                         <button
                             onClick={() => setSettingsOpen(true)}
                             className="flex items-center gap-1.5 text-xs text-cmp-navy px-3.5 py-2 rounded-xl border border-cmp-navy/15 hover:border-cmp-navy/30 hover:bg-cmp-blue-soft transition cursor-pointer"
-                            title="Pengaturan Teks Berjalan, Angka Statistik, & Kontak"
+                            title="Atur konten, kontak, dan foto website"
                         >
                             <Sliders size={14} className="text-cmp-blue" />
                             <span>Pengaturan Web</span>
@@ -249,11 +319,12 @@ export default function Admin() {
                     <div>
                         <h2 className="text-2xl font-extrabold text-cmp-navy tracking-tight">Portfolio Projects</h2>
                         <p className="text-xs text-slate-500 mt-1">
-                            {projects.length} project(s) total • Data tersinkronisasi otomatis dengan halaman depan
+                            Kelola proyek dan foto yang disimpan di database.
                         </p>
                     </div>
 
                     <button
+                        type="button"
                         onClick={() => { setEditing(null); setFormOpen(true); }}
                         className="flex items-center gap-2 rounded-xl bg-cmp-blue hover:bg-cmp-navy text-white px-5 py-2.5 text-sm font-semibold transition shadow-md shadow-cmp-blue/20 cursor-pointer"
                     >
@@ -262,93 +333,28 @@ export default function Admin() {
                     </button>
                 </div>
 
-                {/* Table or Empty State */}
-                {fetching ? (
-                    <div className="flex flex-col items-center justify-center py-20">
-                        <Loader2 size={36} className="text-cmp-blue animate-spin mb-3" />
-                        <span className="text-xs text-slate-400">Memuat data proyek...</span>
-                    </div>
-                ) : projects.length === 0 ? (
-                    <div className="rounded-3xl border border-slate-200 bg-white p-12 text-center shadow-sm">
-                        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-cmp-blue-soft text-cmp-blue mx-auto mb-4">
-                            <ImageIcon size={32} />
+                <section aria-labelledby="database-projects-heading" className="space-y-3">
+                    <h3 id="database-projects-heading" className="font-bold text-cmp-navy">Proyek dari Database</h3>
+                    {fetching ? (
+                        <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-600">
+                            <Loader2 size={16} className="animate-spin text-cmp-blue" aria-hidden="true" />
+                            Memuat proyek dari database…
                         </div>
-                        <h3 className="font-bold text-slate-700 text-lg">Belum ada proyek</h3>
-                        <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
-                            Belum ada data proyek di database. Klik tombol di bawah untuk menambahkan proyek pertama Anda.
-                        </p>
-                        <button
-                            onClick={() => { setEditing(null); setFormOpen(true); }}
-                            className="mt-5 inline-flex items-center gap-2 rounded-xl bg-cmp-blue hover:bg-cmp-navy text-white px-5 py-2.5 text-sm font-semibold transition cursor-pointer"
-                        >
-                            <Plus size={16} /> Tambah Proyek Pertama
-                        </button>
-                    </div>
-                ) : (
-                    <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-left text-sm">
-                                <thead className="border-b border-slate-100 bg-slate-50/75 text-xs font-bold uppercase tracking-wider text-slate-500">
-                                    <tr>
-                                        <th className="px-6 py-4">Foto Card</th>
-                                        <th className="px-6 py-4">Judul Project</th>
-                                        <th className="px-6 py-4">Kategori Project</th>
-                                        <th className="px-6 py-4">Deskripsi</th>
-                                        <th className="px-6 py-4 text-right">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-slate-100 text-slate-600">
-                                    {projects.map((p) => {
-                                        const pImages = Array.isArray(p.images) ? p.images : [];
-                                        const thumb = pImages[0] || '';
-                                        return (
-                                            <tr key={p.id} className="hover:bg-slate-50/80 transition">
-                                                <td className="px-6 py-4">
-                                                    <div className="h-14 w-20 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shadow-inner flex items-center justify-center">
-                                                        {thumb ? (
-                                                            <img src={thumb} alt={p.title} className="h-full w-full object-cover" />
-                                                        ) : (
-                                                            <ImageIcon size={20} className="text-slate-300" />
-                                                        )}
-                                                    </div>
-                                                </td>
-                                                <td className="px-6 py-4 font-bold text-cmp-navy max-w-xs">
-                                                    {p.title}
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    <span className="inline-block rounded-full bg-cmp-blue/10 text-cmp-blue px-3 py-1 text-xs font-semibold">
-                                                        {p.category || p.tag || 'General'}
-                                                    </span>
-                                                </td>
-                                                <td className="px-6 py-4 max-w-sm truncate text-xs text-slate-500">
-                                                    {p.description || '-'}
-                                                </td>
-                                                <td className="px-6 py-4 text-right">
-                                                    <div className="flex items-center justify-end gap-2">
-                                                        <button
-                                                            onClick={() => { setEditing(p); setFormOpen(true); }}
-                                                            className="p-2 rounded-xl text-slate-500 hover:text-cmp-blue hover:bg-cmp-blue-soft transition cursor-pointer"
-                                                            title="Edit Proyek"
-                                                        >
-                                                            <Pencil size={16} />
-                                                        </button>
-                                                        <button
-                                                            onClick={() => setDeleteTarget(p)}
-                                                            className="p-2 rounded-xl text-slate-500 hover:text-rose-500 hover:bg-rose-50 transition cursor-pointer"
-                                                            title="Hapus Proyek"
-                                                        >
-                                                            <Trash2 size={16} />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
-                                </tbody>
-                            </table>
+                    ) : projectsError ? (
+                        <div className="flex flex-wrap items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-600">
+                            <p role="status">Proyek dari database gagal dimuat.</p>
+                            <button type="button" onClick={() => load()} className="font-semibold text-cmp-navy underline">Coba lagi</button>
                         </div>
-                    </div>
-                )}
+                    ) : projects.length === 0 ? (
+                        <p className="rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-600">Belum ada proyek di database.</p>
+                    ) : (
+                        <ProjectsTable
+                            projects={projects}
+                            onEdit={project => { setEditing(project); setFormOpen(true); }}
+                            onDelete={setDeleteTarget}
+                        />
+                    )}
+                </section>
             </main>
 
             {/* Modal Form Add/Edit */}
@@ -387,7 +393,7 @@ export default function Admin() {
             {settingsOpen && (
                 <WebsiteSettingsModal
                     onClose={() => setSettingsOpen(false)}
-                    onSaved={(msg) => notify(msg)}
+                    onSaved={notify}
                 />
             )}
 

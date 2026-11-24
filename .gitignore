@@ -21,6 +21,8 @@ dist-ssr
 .env.*
 !.env.example
 backend/.env
+/backend/data/appearance.json
+/backend/data/appearance.json.*.tmp
 
 # macOS system & AppleDouble files
 .DS_Store

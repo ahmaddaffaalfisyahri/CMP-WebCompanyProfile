@@ -2,7 +2,7 @@ import useMotionDismiss from '../../hooks/useMotionDismiss';
 import React, { useState, useRef } from 'react';
 import { X, ChevronDown, Upload, Crop, Trash2, Loader2, Save } from 'lucide-react';
 import ImageCropModal from './ImageCropModal';
-import { API, getAuthHeaders, DEFAULT_TITLES, DEFAULT_CATEGORIES } from '../../utils/api';
+import { API, getAuthHeaders, imageUrl, DEFAULT_TITLES, DEFAULT_CATEGORIES } from '../../utils/api';
 
 export default function ProjectFormModal({ initial, onSave, onCancel, loading, projects = [] }) {
     const [overlayRef, dismiss] = useMotionDismiss(onCancel);
@@ -46,7 +46,7 @@ export default function ProjectFormModal({ initial, onSave, onCancel, loading, p
     // Crop ulang foto yang sudah ada
     const handleRecropExisting = (url, index) => {
         setReplaceIndex(index);
-        setCropModalData(url);
+        setCropModalData(imageUrl(url));
     };
 
     // Terapkan hasil crop & upload ke backend
@@ -275,7 +275,7 @@ export default function ProjectFormModal({ initial, onSave, onCancel, loading, p
                                 <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-3">
                                     {images.map((url, i) => (
                                         <div key={i} className="group relative aspect-[16/10] rounded-xl overflow-hidden border border-slate-200 bg-slate-900 shadow-sm">
-                                            <img src={url} alt={`Preview ${i}`} className="h-full w-full object-cover" />
+                                            <img src={imageUrl(url)} alt={`Preview ${i}`} className="h-full w-full object-cover" />
                                             
                                             <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-2 transition backdrop-blur-xs">
                                                 <button

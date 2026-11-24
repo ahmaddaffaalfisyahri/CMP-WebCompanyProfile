@@ -1,4 +1,9 @@
-export const API = '/api';
+export const API = import.meta.env.VITE_API_URL?.trim().replace(/\/+$/, '') || '/api';
+const apiOrigin = /^https?:\/\//i.test(API) ? new URL(API).origin : '';
+
+export function imageUrl(path) {
+    return typeof path === 'string' && path.startsWith('/uploads/') ? apiOrigin + path : path;
+}
 
 export function getAuthHeaders(extra = {}) {
     const token = typeof window !== 'undefined' ? localStorage.getItem('cmp_admin_token') : null;
