@@ -94,8 +94,11 @@
 .cmp-site .direction :is(.vision, .mission)[data-reveal="shown"] {
   animation: cmp-rise 740ms var(--motion-reveal-ease) var(--direction-delay, 0ms) both;
 }
-.cmp-site :is(.vision, .about-img):hover {
+.cmp-site .vision:hover {
   box-shadow: 0 10px 24px rgb(1 0 102 / .12), 0 2px var(--red);
+}
+.cmp-site .about-img:hover {
+  box-shadow: var(--about-frame-glow), 0 10px 24px rgb(1 0 102 / .12);
 }
 .cmp-site :is(.vision, .about-img):hover { transform: translateY(-4px); }
 .cmp-site :is(.vision, .about-img) { overflow: hidden; }
@@ -108,30 +111,13 @@
 }
 .cmp-site .project-photo img { transition: scale 250ms var(--motion-ease); }
 .cmp-site .project:hover .project-photo img { scale: 1.04; }
-.cmp-site .service {
-  --service-hover-color: var(--cmp-cta-hover, #B80000);
-  --service-color-duration: 360ms;
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  transition:
-    opacity var(--motion-reveal) var(--motion-reveal-ease) var(--reveal-delay, 0ms),
-    translate var(--motion-reveal) var(--motion-reveal-ease) var(--reveal-delay, 0ms),
-    transform var(--motion-card) var(--motion-ease),
-    border-top-color var(--service-color-duration) ease-in-out,
-    box-shadow var(--service-color-duration) ease-in-out;
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .cmp-site .service { transition: transform 250ms ease, box-shadow 250ms ease; }
+  .cmp-site .service:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 9px 20px rgb(1 0 98 / 12%);
+  }
 }
-.cmp-site .service:hover {
-  z-index: 1;
-  transform: scale(1.025);
-  border-top-color: var(--red);
-  box-shadow: 0 8px 24px rgb(1 0 102 / .07), 0 4px 18px rgb(224 0 0 / .07);
-}
-.cmp-site .service h3 { transition: color var(--service-color-duration) ease-in-out; }
-.cmp-site .service:hover h3 { color: var(--service-hover-color); }
-.cmp-site .service .ico, .cmp-site .service .index { transition: scale var(--motion-card), translate var(--motion-card), color var(--service-color-duration) ease-in-out; }
-.cmp-site .service:hover .ico { scale: 1.05; color: var(--service-hover-color); }
-.cmp-site .service:hover .index { translate: 4px 0; color: var(--service-hover-color); }
 
 .cmp-site .project-gallery[open] { animation: cmp-dialog-in var(--motion-dialog) var(--motion-ease) both; }
 .cmp-site .project-gallery[open]::backdrop { animation: cmp-fade var(--motion-dialog) var(--motion-ease) both; }
@@ -140,11 +126,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .cmp-site [data-reveal] { opacity: 1; translate: none; }
-  .cmp-site :is(.btn, .service, .vision, .mission, .about-img, .project):hover { transform: none; translate: none; }
+  .cmp-site :is(.btn, .vision, .mission, .about-img, .project):hover { transform: none; translate: none; }
   .cmp-site :is(.header a, .vision, .about-img):hover img,
-  .cmp-site .project:hover .project-photo img,
-  .cmp-site .service:hover .ico { scale: 1; }
-  .cmp-site .service:hover .index { translate: none; }
+  .cmp-site .project:hover .project-photo img { scale: 1; }
 }
 
 /* Keep an opaque frame underneath the incoming photo throughout the crossfade. */

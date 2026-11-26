@@ -1,7 +1,14 @@
 /* Public-only styles preserve the existing CMS presentation. */
 .cmp-site { --cmp-primary: #010066; --cmp-accent: #FE0000; --cmp-cta: #E00000; --cmp-cta-hover: #B80000; --cmp-background: #FFFFFF; --cmp-background-alt: #F7F7F7; --cmp-border: #D8D9E2; --cmp-text-secondary: #4A4F63; --cmp-text-primary: #1B1D2E; --cmp-text-light-on-navy: #C9CBE8; --navy: var(--cmp-primary); --red: var(--cmp-accent); --cta: var(--cmp-cta); --hover: var(--cmp-cta-hover); --white: var(--cmp-background); --gray: var(--cmp-background-alt); --border: var(--cmp-border); --muted: var(--cmp-text-secondary); --ink: var(--cmp-text-primary); --tint: var(--cmp-text-light-on-navy); }
 .cmp-site h2, .cmp-site h3 { font-weight: 700; }
+.cmp-site :is(h1, h2)[data-pointer-navigation]:focus { outline: none; }
 .cmp-site section { scroll-margin-top: 12px; }
+.cmp-site #about {
+  display: grid;
+  align-items: center;
+  min-height: calc(100dvh - var(--cmp-nav-height) - 1px);
+  padding-block: clamp(48px, 7dvh, 88px);
+}
 .cmp-site .section-flow {
   --section-edge-fade: clamp(72px, 9vw, 144px);
   --section-blue-accent: color-mix(in srgb, var(--color-cmp-blue) 9%, transparent);
@@ -125,16 +132,13 @@
   .cmp-site .lead,
   .cmp-site .vision p { font-size: clamp(17px, 1.04vw, 24px); }
   .cmp-site .sectionhead .lead { max-width: 43ch; }
-  .cmp-site .about-img > img { height: clamp(390px, 26vw, 680px); }
+  .cmp-site .about-img img { height: clamp(390px, 26vw, 680px); }
   .cmp-site .cmp-glance-value { font-size: clamp(30px, 2vw, 46px); }
 
-  .cmp-site .service,
   .cmp-site .project-copy,
   .cmp-site .form { padding: clamp(26px, 1.65vw, 40px); }
-  .cmp-site .service h3,
   .cmp-site .mission h3,
   .cmp-site .project h3 { font-size: clamp(21px, 1.3vw, 30px); }
-  .cmp-site .service p,
   .cmp-site .mission p,
   .cmp-site .project-copy p,
   .cmp-site .contact-row p,

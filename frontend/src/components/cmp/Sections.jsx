@@ -1,6 +1,6 @@
 // Content transcribed from the supplied prototype; pending official PDF verification.
 import { Fragment, useEffect, useState } from 'react';
-import { ArrowRight, Layers, Settings, Target, TrendingUp } from 'lucide-react';
+import { ArrowRight, ChevronDown, Factory, FileText, HardHat, LaptopMinimal, Layers, Package, Settings, Target, TrendingUp, Wrench } from 'lucide-react';
 import { useCountUp, useInView } from '../../hooks/useInView.js';
 import { imageUrl } from '../../utils/api.js';
 import { defaultWebsiteText, originalSectionPhotos, readAppearance, readLegacyContact } from '../../utils/websiteSettings.js';
@@ -32,6 +32,63 @@ const missions = [
     description: 'Support industrial projects through quality and customer satisfaction.',
   },
 ];
+
+const services = [
+  {
+    number: '01',
+    icon: FileText,
+    title: 'Mechanical\nElectrical Design',
+    description: 'Integrated, efficient M&E design tailored to project requirements.',
+  },
+  {
+    number: '02',
+    icon: Package,
+    title: 'Procurement',
+    description: 'High-quality materials and equipment, aligned with specifications and schedule.',
+  },
+  {
+    number: '03',
+    icon: Factory,
+    title: 'Manufacture',
+    description: 'Panel and component fabrication with strict quality control.',
+  },
+  {
+    number: '04',
+    icon: HardHat,
+    title: 'Project\nErection',
+    description: 'On-site installation and commissioning to standards and schedule.',
+  },
+  {
+    number: '05',
+    icon: LaptopMinimal,
+    title: 'Software\nDevelopment',
+    description: 'Control and monitoring system development and configuration.',
+  },
+  {
+    number: '06',
+    icon: Wrench,
+    title: 'Troubleshooting',
+    description: 'System diagnostics and repairs to maintain optimal performance.',
+  },
+];
+
+function ServiceCard({ number, title, description, icon: Icon }) {
+  return (
+    <article className="service">
+      <div className="service-corner" aria-hidden="true">
+        <svg viewBox="0 0 140 100" preserveAspectRatio="none">
+          <path className="service-corner-accent" d="M0 0 H140 C124 40 108 72 70 72 H48 C27 72 10 84 0 100 Z" />
+          <path className="service-corner-fill" d="M0 0 H135 C119 38 104 68 69 68 H48 C27 68 10 80 0 95 Z" />
+        </svg>
+        <span className="service-number">{number}</span>
+      </div>
+      <Icon className="service-icon" size={54} strokeWidth={2.2} aria-hidden="true" />
+      <h3>{title}</h3>
+      <div className="service-divider" aria-hidden="true" />
+      <p>{description}</p>
+    </article>
+  );
+}
 
 function MissionCard({ number, title, description, icon: Icon }) {
   return (
@@ -98,7 +155,7 @@ function CompanyFacts({ text }) {
   );
 }
 
-export default function Sections() {
+export default function Sections({ onSectionNavigation }) {
   const [appearance, setAppearance] = useState({ text: {}, photos: {} });
   const [legacyContact, setLegacyContact] = useState({});
 
@@ -128,6 +185,10 @@ export default function Sections() {
         </div>
       </div>
     </div>
+    <a className="hero-scroll" href="#about" aria-label="Scroll to About Us" onClick={onSectionNavigation}>
+      <span>SCROLL</span>
+      <ChevronDown size={24} strokeWidth={3} aria-hidden="true" />
+    </a>
   </section>
 <div className="section-flow">
 <section className="section" id="about">
@@ -136,10 +197,13 @@ export default function Sections() {
       <div className="eyebrow">About us</div>
       <h2>More Than Engineering.<br />A Partner in Progress.</h2>
       <p className="lead">Since its inception in {text.establishedYear}, CMP has played an active role in the development, engineering and implementation of Mechanical, Electrical and Automation systems. We deliver professional, effective and value-added services tailored to each project.</p>
+      <p className="lead">We bring these disciplines together from design and procurement through installation and commissioning. We work with clients to account for site conditions and operating requirements, and provide maintenance support once systems are in service.</p>
       <CompanyFacts text={text} />
     </div>
     <div className="about-img">
-      <SitePhoto slot="aboutTeam" photos={photos} alt="CMP team at a project site" />
+      <div className="about-img-inner">
+        <SitePhoto slot="aboutTeam" photos={photos} alt="CMP team at a project site" />
+      </div>
     </div>
   </div>
 </section>
@@ -157,7 +221,17 @@ export default function Sections() {
     </div>
   </div>
 </section>
-<section className="section" id="solutions"><div className="wrap"><div className="sectionhead"><div><div className="eyebrow">Turn-key solutions</div><h2>Built from Idea<br />to Operation.</h2></div><p className="lead">Six capabilities for end-to-end project delivery.</p></div><div className="services"><article className="service"><div className="service-top"><span className="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 20h16M6 16V5h12v11M9 8h6M9 11h6M9 14h4"/></svg></span><span className="index">01</span></div><h3>Mechanical Electrical Design</h3><p>Integrated, efficient M&E design tailored to project requirements.</p></article><article className="service"><div className="service-top"><span className="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 7l9-4 9 4v10l-9 4-9-4zM3 7l9 4 9-4M12 11v10M7 5l10 4"/></svg></span><span className="index">02</span></div><h3>Procurement</h3><p>High-quality materials and equipment, aligned with specifications and schedule.</p></article><article className="service"><div className="service-top"><span className="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 7h6M9 11h2m2 0h2M9 15h6M12 21v-3"/></svg></span><span className="index">03</span></div><h3>Manufacture</h3><p>Panel and component fabrication with strict quality control.</p></article><article className="service"><div className="service-top"><span className="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 16h18v3H3zM5 16v-3a7 7 0 0 1 14 0v3M10 5v6M14 5v6"/></svg></span><span className="index">04</span></div><h3>Project Erection</h3><p>On-site installation and commissioning to standards and schedule.</p></article><article className="service"><div className="service-top"><span className="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 8l-3 3 3 3m8-6 3 3-3 3M9 21h6m-3-4v4"/></svg></span><span className="index">05</span></div><h3>Software Development</h3><p>Control and monitoring system development and configuration.</p></article><article className="service"><div className="service-top"><span className="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M14 6a5 5 0 0 0-6 6l-5 5a2 2 0 0 0 3 3l5-5a5 5 0 0 0 6-6l-3 3-3-3z"/></svg></span><span className="index">06</span></div><h3>Troubleshooting</h3><p>System diagnostics and repairs to maintain optimal performance.</p></article></div></div></section>
+<section className="section" id="solutions">
+  <div className="wrap">
+    <div className="sectionhead">
+      <div><div className="eyebrow">Turn-key solutions</div><h2>Built from Idea<br />to Operation.</h2></div>
+      <p className="lead">Six capabilities for end-to-end project delivery.</p>
+    </div>
+    <div className="services">
+      {services.map(service => <ServiceCard key={service.number} {...service} />)}
+    </div>
+  </div>
+</section>
 <Portfolio photos={photos} />
 </div>
 

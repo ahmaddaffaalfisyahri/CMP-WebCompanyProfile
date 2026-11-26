@@ -21,6 +21,9 @@ function sectionScrollPosition(section, header) {
   if (section.id === 'home') return 0;
 
   const { top, height } = section.getBoundingClientRect();
+  if (section.id === 'about') {
+    return Math.ceil(window.scrollY + top - header.getBoundingClientRect().height);
+  }
   if (section.id === 'projects') {
     const padding = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
     const margin = parseFloat(getComputedStyle(section).scrollMarginTop) || 0;
@@ -56,8 +59,12 @@ export default function CMPPublicSite() {
     if (location.hash !== hash) {
       navigate({ search: location.search, hash }, { state: { sectionNavigation: true } });
     }
-    section.tabIndex = -1;
-    section.focus({ preventScroll: true });
+    const heading = section.querySelector('h1, h2');
+    if (heading) {
+      heading.tabIndex = -1;
+      heading.toggleAttribute('data-pointer-navigation', event.detail > 0);
+      heading.focus({ preventScroll: true });
+    }
     cancelScroll.current?.();
     const top = sectionScrollPosition(section, header.current);
     cancelScroll.current = animatePageScroll(top, 760, () => { cancelScroll.current = null; });
@@ -161,7 +168,7 @@ export default function CMPPublicSite() {
 
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
       root.querySelectorAll('main .section').forEach(section => {
-        section.querySelectorAll('.eyebrow, h2, .lead, .about-img, .cmp-glance-list > li, .service, .project, .contact-row, .form > :not(.small)').forEach(registerReveal);
+        section.querySelectorAll('.eyebrow, h2, .lead, .about-img, .cmp-glance-list > li, .project, .contact-row, .form > :not(.small)').forEach(registerReveal);
       });
       const direction = root.querySelector('.direction');
       if (direction) {
@@ -208,5 +215,5 @@ export default function CMPPublicSite() {
         </div>
       </nav>
     </div>
-  </header><Sections /><footer className="footer"><div className="wrap"><div className="footgrid"><div><img className="logo" src={content.assets.logo} alt="CMP logo" /><p className="footer-description">PT Cipta Maju Persada<br />Mechanical, Electrical & Automation.</p></div><div><h3>Explore CMP</h3><nav><a href="#about">About Us</a><a href="#direction">Vision & Mission</a><a href="#solutions">Turn-Key Solutions</a><a href="#projects">Our Work</a></nav></div><div><h3>Contact</h3><nav><a href="#contact">Contact Us</a><a href="#contact">Discuss your next project</a></nav></div></div><div className="footbase"><span>© {new Date().getFullYear()} PT Cipta Maju Persada.</span><span>Engineering for Better Performance.</span></div></div></footer></div>;
+  </header><Sections onSectionNavigation={handleSectionNavigation} /><footer className="footer"><div className="wrap"><div className="footgrid"><div><img className="logo" src={content.assets.logo} alt="CMP logo" /><p className="footer-description">PT Cipta Maju Persada<br />Mechanical, Electrical & Automation.</p></div><div><h3>Explore CMP</h3><nav><a href="#about">About Us</a><a href="#direction">Vision & Mission</a><a href="#solutions">Turn-Key Solutions</a><a href="#projects">Our Work</a></nav></div><div><h3>Contact</h3><nav><a href="#contact">Contact Us</a><a href="#contact">Discuss your next project</a></nav></div></div><div className="footbase"><span>© {new Date().getFullYear()} PT Cipta Maju Persada.</span><span>Engineering for Better Performance.</span></div></div></footer></div>;
 }
